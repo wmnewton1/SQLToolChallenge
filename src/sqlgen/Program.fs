@@ -1,2 +1,9 @@
-﻿// For more information see https://aka.ms/fsharp-console-apps
-printfn "Hello from F#"
+﻿namespace sqlgen
+
+type Queryable =
+    abstract member Name : string
+
+// example implementation of Queryable
+type Event() =
+    interface Queryable with
+        member this.Name = "Event"
