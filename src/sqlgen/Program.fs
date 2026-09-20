@@ -26,4 +26,6 @@ type Field =
     abstract member Name: string
     abstract member Table: Queryable
 
-type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list, where: Condition)
+// TODO change 'where' param type to be binary tree of Condition type
+type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list, where: Condition) =
+    // TODO implement
