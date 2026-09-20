@@ -25,3 +25,5 @@ type Condition =
 type Field =
     abstract member Name: string
     abstract member Table: Queryable
+
+type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list, where: Condition)
