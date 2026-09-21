@@ -8,23 +8,23 @@ type Event() =
     interface Queryable with
         member this.Name = "Event"
 
-type JoinClause =
-    abstract member Join : JoinEnum
-    abstract member Table : Queryable
-    abstract member Condition : Condition
+type JoinClause(join: JoinEnum, table: Queryable, condition: Condition) =
+    member this.Join = join
+    member this.Table = table
+    member this.Condition = condition
 
 type JoinEnum =
     | InnerJoin = "INNER JOIN"
     | FullJoin = "FULL JOIN"
 
-type Condition =
-    abstract member Field: Field
-    abstract member Operator: string
-    abstract member Value: obj
+type Condition(field: Field, operator: string, value: obj) =
+    member this.Field = field
+    member this.Operator = operator
+    member this.Value = value
 
-type Field =
-    abstract member Name: string
-    abstract member Table: Queryable
+type Field(name: string, table: Queryable) =
+    member this.Name = name
+    member this.Table = table
 
 // TODO change 'where' param type to be binary tree of Condition type
 type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list, where: Condition) =
