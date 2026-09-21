@@ -33,4 +33,12 @@ type Field(name: string, alias: string option,table: Queryable) =
     member this.Table = table
 
 type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list, where: Tree<Condition | LogicalOperator>) =
-    // TODO implement
+    let template = "SELECT %s FROM %s"
+    let comma = ", "
+
+    let columns = []
+
+    for column in columns do
+        columns <- columns :: column.Name
+
+    let query = sprintf template (String.concat comma columns) (table.Name)
