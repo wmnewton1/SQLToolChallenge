@@ -32,7 +32,10 @@ type Field(name: string, alias: string option,table: Queryable) =
     member this.Alias = alias
     member this.Table = table
 
-type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list, where: Tree<Condition | LogicalOperator>) =
+type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list option, where: Tree<Condition | LogicalOperator> option) =
+    if columns.IsEmpty then
+        failwith "At least one column must be specified."
+
     let template = "SELECT %s FROM %s"
     let comma = ", "
 
