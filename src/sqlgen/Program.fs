@@ -10,6 +10,7 @@ type LogicalOperator =
 
 type Queryable =
     abstract member Name : string
+    abstract member Alias : string option
 
 // example implementation of Queryable
 // type Event() =
@@ -26,8 +27,9 @@ type Condition(field: Field, operator: string, value: obj) =
     member this.Operator = operator
     member this.Value = value
 
-type Field(name: string, table: Queryable) =
+type Field(name: string, alias: string option,table: Queryable) =
     member this.Name = name
+    member this.Alias = alias
     member this.Table = table
 
 type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list, where: Tree<Condition | LogicalOperator>) =
