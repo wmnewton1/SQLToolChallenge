@@ -49,7 +49,10 @@ type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list opti
     if (joining.IsEmpty && where.IsEmpty) then
         query
     else
+        let joins = parseJoins(joining)
+        let whereClause = parseWhere(where.Value)
 
+        sprintf "%s %s %s" query joins whereClause
 
     let parseJoins(joining: JoinClause list) =
         let template = "%s %s ON %s"
