@@ -22,10 +22,14 @@ type Condition(field: Field, operator: string, value: obj) =
     member this.Operator = operator
     member this.Value = value
 
+type LogicalOperator =
+    | And = "AND"
+    | Or = "OR"
+
 type Field(name: string, table: Queryable) =
     member this.Name = name
     member this.Table = table
 
 // TODO change 'where' param type to be binary tree of Condition type
-type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list, where: Condition) =
+type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list, where: Tree<Condition | LogicalOperator>) =
     // TODO implement
