@@ -3,6 +3,8 @@
 type Join =
     | InnerJoin = "INNER JOIN"
     | FullJoin = "FULL JOIN"
+    | LeftJoin = "LEFT JOIN"
+    | RightJoin = "RIGHT JOIN"
 
 type LogicalOperator =
     | And = "AND"
