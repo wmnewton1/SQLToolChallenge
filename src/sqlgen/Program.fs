@@ -1,30 +1,30 @@
 ﻿namespace sqlgen
 
+type Join =
+    | InnerJoin = "INNER JOIN"
+    | FullJoin = "FULL JOIN"
+
+type LogicalOperator =
+    | And = "AND"
+    | Or = "OR"
+
 type Queryable =
     abstract member Name : string
 
 // example implementation of Queryable
-type Event() =
-    interface Queryable with
-        member this.Name = "Event"
+// type Event() =
+//     interface Queryable with
+//         member this.Name = "Event"
 
-type JoinClause(join: JoinEnum, table: Queryable, condition: Condition) =
+type JoinClause(join: Join, table: Queryable, condition: Condition) =
     member this.Join = join
     member this.Table = table
     member this.Condition = condition
-
-type JoinEnum =
-    | InnerJoin = "INNER JOIN"
-    | FullJoin = "FULL JOIN"
 
 type Condition(field: Field, operator: string, value: obj) =
     member this.Field = field
     member this.Operator = operator
     member this.Value = value
-
-type LogicalOperator =
-    | And = "AND"
-    | Or = "OR"
 
 type Field(name: string, table: Queryable) =
     member this.Name = name
