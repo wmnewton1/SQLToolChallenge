@@ -45,3 +45,24 @@ type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list opti
         columns <- columns :: column.Name
 
     let query = sprintf template (String.concat comma columns) (table.Name)
+
+    if (joining.IsEmpty && where.IsEmpty) then
+        query
+    else
+
+
+    let parseJoins(joining: JoinClause list) =
+        let template = "%s %s ON %s"
+
+        let joins = []
+
+        for join in joining do
+            let joinStr = sprintf template (join.Join.ToString()) (join.Table.Name) (sprintf "%s %s %O" join.Condition.Field.Name join.Condition.Operator join.Condition.Value)
+            joins <- joins :: joinStr
+
+        String.concat " " joins
+
+    
+        
+
+
