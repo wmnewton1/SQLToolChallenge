@@ -30,6 +30,5 @@ type Field(name: string, table: Queryable) =
     member this.Name = name
     member this.Table = table
 
-// TODO change 'where' param type to be binary tree of Condition type
 type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list, where: Tree<Condition | LogicalOperator>) =
     // TODO implement
