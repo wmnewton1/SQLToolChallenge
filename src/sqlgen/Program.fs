@@ -50,6 +50,14 @@ type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list opti
 
     if (joining.IsEmpty && where.IsEmpty) then
         query
+    elif (where.IsEmpty) then
+        let joins = parseJoins(joining)
+
+        sprintf "%s %s" query joins
+    elif (joining.IsEmpty) then
+        let whereClause = parseWhere(where.Value)
+
+        sprintf "%s %s" query whereClause
     else
         let joins = parseJoins(joining)
         let whereClause = parseWhere(where.Value)
@@ -66,8 +74,3 @@ type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list opti
             joins <- joins :: joinStr
 
         String.concat " " joins
-
-    
-        
-
-
