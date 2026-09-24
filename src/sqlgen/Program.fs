@@ -73,16 +73,15 @@ type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list opti
             let joinStr = sprintf template (string join.Join) (join.Table.Name) (resolveCondition(join.Condition))
             joins <- joins :: joinStr
 
-        String.concat " " joins
-
-    let resolveWhere(where: Tree<Condition | LogicalOperator>) =
+        String.concat " " joins    
 
     let resolveCondition(condition: Condition) =
         let template = "%s %s %s"
 
         sprintf template (condition.Field.Name) (condition.Operator) (string condition.Value)
 
-    let evaluateNode(node: Node<Condition | LogicalOperator>) =
+    let resolveWhere(where: Tree<Condition | LogicalOperator>) =
+
         if (node.Left == null && node.Right == null)
             // node is a leaf, therefore a condition
             resolveCondition(node.Value)
