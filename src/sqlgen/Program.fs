@@ -55,12 +55,12 @@ type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list opti
 
         sprintf "%s %s" query joins
     elif (joining.IsEmpty) then
-        let whereClause = parseWhere(where.Value)
+        let whereClause = parseWhere(where)
 
         sprintf "%s %s" query whereClause
     else
         let joins = parseJoins(joining)
-        let whereClause = parseWhere(where.Value)
+        let whereClause = parseWhere(where)
 
         sprintf "%s %s %s" query joins whereClause
 
@@ -74,6 +74,8 @@ type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list opti
             joins <- joins :: joinStr
 
         String.concat " " joins
+
+    let parseWhere(where: Tree<Condition | LogicalOperator>) =
 
     let parseCondition(condition: Condition) =
         let template = "%s %s %s"
