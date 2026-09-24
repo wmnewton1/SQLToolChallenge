@@ -83,4 +83,10 @@ type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list opti
         sprintf template (condition.Field.Name) (condition.Operator) (string condition.Value)
 
     let evaluateNode(node: Node<Condition | LogicalOperator>) =
-        
+        if (node.Left == null && node.Right == null)
+            // node is a leaf, therefore a condition
+            parseCondition(node.Value)
+        elif (node.Left != null)
+            evaluateNode(node.Left)
+        else
+            evaluateNode(node.Right)
