@@ -51,33 +51,33 @@ type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list opti
     if (joining.IsEmpty && where == null) then
         query
     elif (where.IsEmpty) then
-        let joins = parseJoins(joining)
+        let joins = resolveJoins(joining)
 
         sprintf "%s %s" query joins
     elif (joining.IsEmpty) then
-        let whereClause = parseWhere(where)
+        let whereClause = resolveWhere(where)
 
         sprintf "%s %s" query whereClause
     else
-        let joins = parseJoins(joining)
-        let whereClause = parseWhere(where)
+        let joins = resolveJoins(joining)
+        let whereClause = resolveWhere(where)
 
         sprintf "%s %s %s" query joins whereClause
 
-    let parseJoins(joining: JoinClause list) =
+    let resolveJoins(joining: JoinClause list) =
         let template = "%s %s ON %s"
 
         let joins = []
 
         for join in joining do
-            let joinStr = sprintf template (string join.Join) (join.Table.Name) (parseCondition(join.Condition))
+            let joinStr = sprintf template (string join.Join) (join.Table.Name) (resolveCondition(join.Condition))
             joins <- joins :: joinStr
 
         String.concat " " joins
 
-    let parseWhere(where: Tree<Condition | LogicalOperator>) =
+    let resolveWhere(where: Tree<Condition | LogicalOperator>) =
 
-    let parseCondition(condition: Condition) =
+    let resolveCondition(condition: Condition) =
         let template = "%s %s %s"
 
         sprintf template (condition.Field.Name) (condition.Operator) (string condition.Value)
@@ -85,7 +85,7 @@ type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list opti
     let evaluateNode(node: Node<Condition | LogicalOperator>) =
         if (node.Left == null && node.Right == null)
             // node is a leaf, therefore a condition
-            parseCondition(node.Value)
+            resolveCondition(node.Value)
         elif (node.Left != null)
             evaluateNode(node.Left)
         else
