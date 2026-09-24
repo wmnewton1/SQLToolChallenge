@@ -70,7 +70,7 @@ type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list opti
         let joins = []
 
         for join in joining do
-            let joinStr = sprintf template (join.Join.ToString()) (join.Table.Name) (sprintf "%s %s %O" join.Condition.Field.Name join.Condition.Operator join.Condition.Value)
+            let joinStr = sprintf template (string join.Join) (join.Table.Name) (parseCondition(join.Condition))
             joins <- joins :: joinStr
 
         String.concat " " joins
