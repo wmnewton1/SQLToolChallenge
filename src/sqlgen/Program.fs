@@ -74,3 +74,8 @@ type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list opti
             joins <- joins :: joinStr
 
         String.concat " " joins
+
+    let parseCondition(condition: Condition) =
+        let template = "%s %s %s"
+
+        sprintf template (condition.Field.Name) (condition.Operator) (string condition.Value)
