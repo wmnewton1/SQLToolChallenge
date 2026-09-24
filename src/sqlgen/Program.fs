@@ -48,7 +48,7 @@ type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list opti
 
     let query = sprintf template (String.concat comma columns) (table.Name)
 
-    if (joining.IsEmpty && where.IsEmpty) then
+    if (joining.IsEmpty && where == null) then
         query
     elif (where.IsEmpty) then
         let joins = parseJoins(joining)
