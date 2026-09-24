@@ -81,11 +81,15 @@ type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list opti
         sprintf template (condition.Field.Name) (condition.Operator) (string condition.Value)
 
     let resolveWhere(where: Tree<Condition | LogicalOperator>) =
+        evaluateNode(where.Root)
 
+    let evaluateNode(node: Node<Condition | LogicalOperator>, querySoFar: string) =
         if (node.Left == null && node.Right == null)
             // node is a leaf, therefore a condition
-            resolveCondition(node.Value)
+            sprintf "%s %s" (querySoFar) (resolveCondition(node.Value))
         elif (node.Left != null)
+            sprintf "%s %s" (querySoFar) (string node)
             evaluateNode(node.Left)
         else
+            sprintf "%s %s" (querySoFar) (string node)
             evaluateNode(node.Right)
