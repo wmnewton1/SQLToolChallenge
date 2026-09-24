@@ -81,3 +81,6 @@ type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list opti
         let template = "%s %s %s"
 
         sprintf template (condition.Field.Name) (condition.Operator) (string condition.Value)
+
+    let evaluateNode(node: Node<Condition | LogicalOperator>) =
+        
