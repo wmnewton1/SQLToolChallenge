@@ -13,6 +13,10 @@ type LogicalOperator =
     | And = "AND"
     | Or = "OR"
 
+type ClauseComponent =
+    | Condition of Condition
+    | LogicalOperator of LogicalOperator
+
 type Queryable =
     abstract member Name : string
     abstract member Alias : string option
@@ -37,8 +41,8 @@ type Field(name: string, alias: string option,table: Queryable) =
     member this.Alias = alias
     member this.Table = table
 
-type SqlGen(table: Queryable, columns: Field list, joining: JoinClause list option, where: Tree<Condition | LogicalOperator> option) =
-    if columns.IsEmpty then
+let generateSql(table: Queryable) (columns: Field list) (joining: JoinClause list option) (where: Tree<ClauseComponent> option): string =
+    if (columns.IsEmpty) then
         failwith "At least one column must be specified."
 
     let template = "SELECT %s FROM %s"
