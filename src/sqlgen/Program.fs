@@ -13,10 +13,6 @@ type LogicalOperator =
     | And = "AND"
     | Or = "OR"
 
-type ClauseComponent =
-    | Condition of Condition
-    | LogicalOperator of LogicalOperator
-
 type Queryable =
     abstract member Name : string
     abstract member Alias : string option
@@ -26,20 +22,24 @@ type Queryable =
 //     interface Queryable with
 //         member this.Name = "Event"
 
-type JoinClause(join: Join, table: Queryable, condition: Condition) =
-    member this.Join = join
+type Field(name: string, alias: string option,table: Queryable) =
+    member this.Name = name
+    member this.Alias = alias
     member this.Table = table
-    member this.Condition = condition
 
 type Condition(field: Field, operator: string, value: obj) =
     member this.Field = field
     member this.Operator = operator
     member this.Value = value
 
-type Field(name: string, alias: string option,table: Queryable) =
-    member this.Name = name
-    member this.Alias = alias
+type JoinClause(join: Join, table: Queryable, condition: Condition) =
+    member this.Join = join
     member this.Table = table
+    member this.Condition = condition
+
+type ClauseComponent =
+    | Condition of Condition
+    | LogicalOperator of LogicalOperator
 
 let generateSql(table: Queryable) (columns: Field list) (joining: JoinClause list option) (where: Tree<ClauseComponent> option): string =
     if (columns.IsEmpty) then
@@ -87,16 +87,18 @@ let generateSql(table: Queryable) (columns: Field list) (joining: JoinClause lis
 
         sprintf template (condition.Field.Name) (condition.Operator) (string condition.Value)
 
-    let resolveWhere(where: Tree<Condition | LogicalOperator>) =
+    let resolveWhere(where: Tree<ClauseComponent>) =
         evaluateNode(where.Root)
 
-    let evaluateNode(node: Node<Condition | LogicalOperator>, querySoFar: string) =
-        if (node.Left == null && node.Right == null)
+    let evaluateNode(node: Node<ClauseComponent>, querySoFar: string) =
+        if (node.Left == null && node.Right == null) then
             // node is a leaf, therefore a condition
             sprintf "%s %s" (querySoFar) (resolveCondition(node.Value))
-        elif (node.Left != null)
+        elif (node.Left != null) then
             sprintf "%s %s" (querySoFar) (string node)
             evaluateNode(node.Left)
         else
             sprintf "%s %s" (querySoFar) (string node)
             evaluateNode(node.Right)
+    
+    ""
