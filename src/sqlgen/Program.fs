@@ -1,5 +1,8 @@
 ﻿namespace sqlgen
 
+// to compile, run
+// dotnet build src/sqlgen/Repositories.fsproj
+
 type Join =
     | InnerJoin = "INNER JOIN"
     | FullJoin = "FULL JOIN"
