@@ -1,4 +1,4 @@
-﻿namespace sqlgen
+﻿module sqlgen
 
 // to compile, run
 // dotnet build src/sqlgen/Repositories.fsproj
@@ -41,6 +41,36 @@ type ClauseComponent =
     | Condition of Condition
     | LogicalOperator of LogicalOperator
 
+let resolveJoins(joining: JoinClause list) =
+    let template = "%s %s ON %s"
+
+    let joins = []
+
+    for join in joining do
+        let joinStr = sprintf template (string join.Join) (join.Table.Name) (resolveCondition(join.Condition))
+        joins <- joins :: joinStr
+
+    String.concat " " joins    
+
+let resolveCondition(condition: Condition) =
+    let template = "%s %s %s"
+
+    sprintf template (condition.Field.Name) (condition.Operator) (string condition.Value)
+
+let evaluateNode(node: Node<ClauseComponent>, querySoFar: string): string =
+    if (node.Left == null && node.Right == null) then
+        // node is a leaf, therefore a condition
+        sprintf "%s %s" (querySoFar) (resolveCondition(node.Value))
+    elif (node.Left != null) then
+        sprintf "%s %s" (querySoFar) (string node)
+        evaluateNode(node.Left)
+    else
+        sprintf "%s %s" (querySoFar) (string node)
+        evaluateNode(node.Right)
+
+let resolveWhere(where: Tree<ClauseComponent>): string =
+    evaluateNode(where.Root)
+
 let generateSql(table: Queryable) (columns: Field list) (joining: JoinClause list option) (where: Tree<ClauseComponent> option): string =
     if (columns.IsEmpty) then
         failwith "At least one column must be specified."
@@ -70,35 +100,5 @@ let generateSql(table: Queryable) (columns: Field list) (joining: JoinClause lis
         let whereClause = resolveWhere(where)
 
         sprintf "%s %s %s" query joins whereClause
-
-    let resolveJoins(joining: JoinClause list) =
-        let template = "%s %s ON %s"
-
-        let joins = []
-
-        for join in joining do
-            let joinStr = sprintf template (string join.Join) (join.Table.Name) (resolveCondition(join.Condition))
-            joins <- joins :: joinStr
-
-        String.concat " " joins    
-
-    let resolveCondition(condition: Condition) =
-        let template = "%s %s %s"
-
-        sprintf template (condition.Field.Name) (condition.Operator) (string condition.Value)
-
-    let resolveWhere(where: Tree<ClauseComponent>) =
-        evaluateNode(where.Root)
-
-    let evaluateNode(node: Node<ClauseComponent>, querySoFar: string) =
-        if (node.Left == null && node.Right == null) then
-            // node is a leaf, therefore a condition
-            sprintf "%s %s" (querySoFar) (resolveCondition(node.Value))
-        elif (node.Left != null) then
-            sprintf "%s %s" (querySoFar) (string node)
-            evaluateNode(node.Left)
-        else
-            sprintf "%s %s" (querySoFar) (string node)
-            evaluateNode(node.Right)
     
     ""
