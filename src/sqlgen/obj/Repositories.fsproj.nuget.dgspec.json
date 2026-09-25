@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\willi\\Repositories\\Repositories.fsproj": {}
+    "C:\\Users\\willi\\Repositories\\src\\sqlgen\\Repositories.fsproj": {}
   },
   "projects": {
-    "C:\\Users\\willi\\Repositories\\Repositories.fsproj": {
+    "C:\\Users\\willi\\Repositories\\src\\sqlgen\\Repositories.fsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\willi\\Repositories\\Repositories.fsproj",
+        "projectUniqueName": "C:\\Users\\willi\\Repositories\\src\\sqlgen\\Repositories.fsproj",
         "projectName": "Repositories",
-        "projectPath": "C:\\Users\\willi\\Repositories\\Repositories.fsproj",
+        "projectPath": "C:\\Users\\willi\\Repositories\\src\\sqlgen\\Repositories.fsproj",
         "packagesPath": "C:\\Users\\willi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\willi\\Repositories\\obj\\",
+        "outputPath": "C:\\Users\\willi\\Repositories\\src\\sqlgen\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\willi\\AppData\\Roaming\\NuGet\\NuGet.Config"

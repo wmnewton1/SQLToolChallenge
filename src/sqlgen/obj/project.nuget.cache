@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rQ1w/m/+obI=",
+  "dgSpecHash": "ndHhEOOMDV0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\willi\\Repositories\\Repositories.fsproj",
+  "projectFilePath": "C:\\Users\\willi\\Repositories\\src\\sqlgen\\Repositories.fsproj",
   "expectedPackageFiles": [
     "C:\\Users\\willi\\.nuget\\packages\\fsharp.core\\10.1.401\\fsharp.core.10.1.401.nupkg.sha512"
   ],
