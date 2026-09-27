@@ -1,5 +1,7 @@
 ﻿module sqlgen
 
+open TreeUtils
+
 // to compile, run
 // dotnet build src/sqlgen/Repositories.fsproj
 
@@ -67,7 +69,7 @@ let resolveJoins(joining: JoinClause list) =
 
     String.concat " " joins    
 
-let evaluateNode(node: Node<ClauseComponent>, querySoFar: string): string =
+let rec evaluateNode(node: Node<ClauseComponent>, querySoFar: string): string =
     if (node.Left == null && node.Right == null) then
         // node is a leaf, therefore a condition
         sprintf "%s %s" (querySoFar) (resolveCondition(node.Value))
