@@ -16,8 +16,12 @@ let getJoin = function
     | Join.RightJoin -> "RIGHT JOIN"
 
 type LogicalOperator =
-    | And = "AND"
-    | Or = "OR"
+    | And
+    | Or
+
+let getOperator = function
+    | LogicalOperator.And -> "AND"
+    | LogicalOperator.Or -> "OR"
 
 type Queryable =
     abstract member Name : string
