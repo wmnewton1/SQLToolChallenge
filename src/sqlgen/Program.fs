@@ -51,6 +51,11 @@ type ClauseComponent =
     | Condition of Condition
     | LogicalOperator of LogicalOperator
 
+let resolveCondition(condition: Condition) =
+    let template = "%s %s %s"
+
+    sprintf template (condition.Field.Name) (condition.Operator) (string condition.Value)
+
 let resolveJoins(joining: JoinClause list) =
     let template = "%s %s ON %s"
 
@@ -61,11 +66,6 @@ let resolveJoins(joining: JoinClause list) =
         joins <- joins :: joinStr
 
     String.concat " " joins    
-
-let resolveCondition(condition: Condition) =
-    let template = "%s %s %s"
-
-    sprintf template (condition.Field.Name) (condition.Operator) (string condition.Value)
 
 let evaluateNode(node: Node<ClauseComponent>, querySoFar: string): string =
     if (node.Left == null && node.Right == null) then
