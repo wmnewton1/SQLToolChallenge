@@ -4,10 +4,16 @@
 // dotnet build src/sqlgen/Repositories.fsproj
 
 type Join =
-    | InnerJoin = "INNER JOIN"
-    | FullJoin = "FULL JOIN"
-    | LeftJoin = "LEFT JOIN"
-    | RightJoin = "RIGHT JOIN"
+    | InnerJoin
+    | FullJoin
+    | LeftJoin
+    | RightJoin
+
+let getJoin = function
+    | Join.InnerJoin -> "INNER JOIN"
+    | Join.FullJoin -> "FULL JOIN"
+    | Join.LeftJoin -> "LEFT JOIN"
+    | Join.RightJoin -> "RIGHT JOIN"
 
 type LogicalOperator =
     | And = "AND"
@@ -47,7 +53,7 @@ let resolveJoins(joining: JoinClause list) =
     let joins = []
 
     for join in joining do
-        let joinStr = sprintf template (string join.Join) (join.Table.Name) (resolveCondition(join.Condition))
+        let joinStr = sprintf template (getJoin(join.Join)) (join.Table.Name) (resolveCondition(join.Condition))
         joins <- joins :: joinStr
 
     String.concat " " joins    
