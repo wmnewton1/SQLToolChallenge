@@ -97,13 +97,13 @@ let generateSql(table: Queryable) (columns: Field list) (joining: JoinClause lis
 
     let query = sprintf template (String.concat comma columns) (table.Name)
 
-    if (joining.IsEmpty && where == null) then
+    if (joining == null && where == null) then
         query
-    elif (where.IsEmpty) then
+    elif (where == null) then
         let joins = resolveJoins(joining)
 
         sprintf "%s %s" query joins
-    elif (joining.IsEmpty) then
+    elif (joining == null) then
         let whereClause = resolveWhere(where)
 
         sprintf "%s %s" query whereClause
