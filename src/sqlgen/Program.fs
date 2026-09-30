@@ -57,11 +57,11 @@ let resolveCondition(condition: Condition) =
     sprintf "%s %s %s" (condition.Field.Name) (condition.Operator) (string condition.Value)
 
 let resolveJoins(joining: JoinClause list) =
-    let joins = []
+    let joins = ResizeArray<string>()
 
     for join in joining do
         let joinStr = sprintf "%s %s ON %s" (getJoin(join.Join)) (join.Table.Name) (resolveCondition(join.Condition))
-        joins <- joins :: joinStr
+        joins.Add(joinStr)
 
     String.concat " " joins    
 
