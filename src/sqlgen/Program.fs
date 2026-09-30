@@ -71,17 +71,17 @@ let resolveJoins(joining: JoinClause list) =
     String.concat " " joins    
 
 let rec evaluateNode(node: Node<ClauseComponent>, querySoFar: string): string =
-    if (node.Left == null && node.Right == null) then
+    if (node.Left = null && node.Right = null) then
         // node is a leaf, therefore a condition
         let condition = handleNodeValue(node.Value)
 
         sprintf "%s %s" (querySoFar) (condition)
     elif (node.Left != null) then
         sprintf "%s %s" (querySoFar) (string node)
-        evaluateNode(node.Left)
+        evaluateNode(node.Left, querySoFar)
     else
         sprintf "%s %s" (querySoFar) (string node)
-        evaluateNode(node.Right)
+        evaluateNode(node.Right, querySoFar)
 
 let resolveWhere(rootNode: Node<ClauseComponent>): string =
     evaluateNode(rootNode, "")
