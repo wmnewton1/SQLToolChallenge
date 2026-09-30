@@ -85,10 +85,10 @@ let generateSql(table: Queryable) (columns: Field list) (joining: JoinClause lis
 
     let comma = ", "
 
-    let columns = []
+    let columns = ResizeArray<string>()
 
     for column in columns do
-        columns <- columns :: column.Name
+        columns.Add(column.Name)
 
     let query = sprintf "SELECT %s FROM %s" (String.concat comma columns) (table.Name)
 
