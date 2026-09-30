@@ -54,17 +54,13 @@ type ClauseComponent =
     | LogicalOperator of LogicalOperator
 
 let resolveCondition(condition: Condition) =
-    let template = "%s %s %s"
-
-    sprintf template (condition.Field.Name) (condition.Operator) (string condition.Value)
+    sprintf "%s %s %s" (condition.Field.Name) (condition.Operator) (string condition.Value)
 
 let resolveJoins(joining: JoinClause list) =
-    let template = "%s %s ON %s"
-
     let joins = []
 
     for join in joining do
-        let joinStr = sprintf template (getJoin(join.Join)) (join.Table.Name) (resolveCondition(join.Condition))
+        let joinStr = sprintf "%s %s ON %s" (getJoin(join.Join)) (join.Table.Name) (resolveCondition(join.Condition))
         joins <- joins :: joinStr
 
     String.concat " " joins    
@@ -87,7 +83,6 @@ let generateSql(table: Queryable) (columns: Field list) (joining: JoinClause lis
     if (columns.IsEmpty) then
         failwith "At least one column must be specified."
 
-    let template = "SELECT %s FROM %s"
     let comma = ", "
 
     let columns = []
@@ -95,7 +90,7 @@ let generateSql(table: Queryable) (columns: Field list) (joining: JoinClause lis
     for column in columns do
         columns <- columns :: column.Name
 
-    let query = sprintf template (String.concat comma columns) (table.Name)
+    let query = sprintf "SELECT %s FROM %s" (String.concat comma columns) (table.Name)
 
     if (joining == null && where == null) then
         query
