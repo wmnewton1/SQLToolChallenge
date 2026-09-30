@@ -34,7 +34,7 @@ type Queryable =
 //     interface Queryable with
 //         member this.Name = "Event"
 
-type Field(name: string, alias: string option,table: Queryable) =
+type Field(name: string, alias: string, table: Queryable) =
     member this.Name = name
     member this.Alias = alias
     member this.Table = table
@@ -86,7 +86,7 @@ let rec evaluateNode(node: Node<ClauseComponent>, querySoFar: string): string =
 let resolveWhere(rootNode: Node<ClauseComponent>): string =
     evaluateNode(rootNode, "")
 
-let generateSql(table: Queryable) (columns: Field list) (joining: JoinClause list option) (whereRootNode: Node<ClauseComponent> option): string =
+let generateSql(table: Queryable) (columns: Field list) (joining: JoinClause list) (whereRootNode: Node<ClauseComponent>): string =
     if (columns.IsEmpty) then
         failwith "At least one column must be specified."
 
