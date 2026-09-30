@@ -53,6 +53,11 @@ type ClauseComponent =
     | Condition of Condition
     | LogicalOperator of LogicalOperator
 
+let matchClauseComponent (component: ClauseComponent) =
+    match component with
+    | Condition condition -> condition
+    | LogicalOperator operator  -> operator
+
 let resolveCondition(condition: Condition) =
     sprintf "%s %s %s" (condition.Field.Name) (condition.Operator) (string condition.Value)
 
@@ -68,7 +73,9 @@ let resolveJoins(joining: JoinClause list) =
 let rec evaluateNode(node: Node<ClauseComponent>, querySoFar: string): string =
     if (node.Left == null && node.Right == null) then
         // node is a leaf, therefore a condition
-        sprintf "%s %s" (querySoFar) (resolveCondition(node.Value))
+        let condition = matchClauseComponent(node.Value)
+
+        sprintf "%s %s" (querySoFar) (resolveCondition(condition))
     elif (node.Left != null) then
         sprintf "%s %s" (querySoFar) (string node)
         evaluateNode(node.Left)
