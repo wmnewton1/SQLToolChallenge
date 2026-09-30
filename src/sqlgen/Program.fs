@@ -50,16 +50,16 @@ type JoinClause(join: Join, table: Queryable, condition: Condition) =
     member this.Condition = condition
 
 type ClauseComponent =
-    | Condition of Condition
-    | LogicalOperator of LogicalOperator
-
-let matchClauseComponent (component: ClauseComponent) =
-    match component with
-    | Condition condition -> condition
-    | LogicalOperator operator  -> operator
+    | Con of Condition
+    | LogOp of LogicalOperator
 
 let resolveCondition(condition: Condition) =
     sprintf "%s %s %s" (condition.Field.Name) (condition.Operator) (string condition.Value)
+
+let handleNodeValue (nodeValue: ClauseComponent) : string =
+    match nodeValue with
+    | Con condition -> resolveCondition condition
+    | LogOp operator -> getOperator(operator)
 
 let resolveJoins(joining: JoinClause list) =
     let joins = ResizeArray<string>()
@@ -73,9 +73,9 @@ let resolveJoins(joining: JoinClause list) =
 let rec evaluateNode(node: Node<ClauseComponent>, querySoFar: string): string =
     if (node.Left == null && node.Right == null) then
         // node is a leaf, therefore a condition
-        let condition = matchClauseComponent(node.Value)
+        let condition = handleNodeValue(node.Value)
 
-        sprintf "%s %s" (querySoFar) (resolveCondition(condition))
+        sprintf "%s %s" (querySoFar) (condition)
     elif (node.Left != null) then
         sprintf "%s %s" (querySoFar) (string node)
         evaluateNode(node.Left)
