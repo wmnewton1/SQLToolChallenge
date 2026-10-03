@@ -53,13 +53,13 @@ type ClauseComponent =
     | Con of Condition
     | LogOp of LogicalOperator
 
-let resolveCondition(condition: Condition) =
+let resolveCondition(condition: Condition) : string =
     sprintf "%s %s %s" (condition.Field.Name) (condition.Operator) (string condition.Value)
 
 let handleNodeValue (nodeValue: ClauseComponent) : string =
     match nodeValue with
     | Con condition -> resolveCondition condition
-    | LogOp operator -> getOperator(operator)
+    | LogOp operator -> getOperator operator
 
 let resolveJoins(joining: JoinClause list) =
     let joins = ResizeArray<string>()
@@ -71,17 +71,17 @@ let resolveJoins(joining: JoinClause list) =
     String.concat " " joins    
 
 let rec evaluateNode(node: Node<ClauseComponent>, querySoFar: string): string =
-    if (node.Left = None && node.Right = None) then
+    match node.Left, node.Right with
+    | None, None ->
         // node is a leaf, therefore a condition
-        let condition = handleNodeValue(node.Value)
-
-        sprintf "%s %s" (querySoFar) (condition)
-    elif (node.Left <> None) then
-        sprintf "%s %s" (querySoFar) (string node)
-        evaluateNode(node.Left, querySoFar)
-    else
-        sprintf "%s %s" (querySoFar) (string node)
-        evaluateNode(node.Right, querySoFar)
+        let condition = handleNodeValue node.Value
+        sprintf "%s %s" querySoFar condition
+    | Some leftNode, None ->
+        sprintf "%s %s" (querySoFar) (string leftNode.Value)
+        evaluateNode(leftNode, querySoFar)
+    | None, Some rightNode ->
+        sprintf "%s %s" (querySoFar) (string rightNode.Value)
+        evaluateNode(rightNode, querySoFar)
 
 let resolveWhere(rootNode: Node<ClauseComponent>): string =
     evaluateNode(rootNode, "")
