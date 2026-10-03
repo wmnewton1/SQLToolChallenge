@@ -76,7 +76,7 @@ let rec evaluateNode(node: Node<ClauseComponent>, querySoFar: string): string =
         let condition = handleNodeValue(node.Value)
 
         sprintf "%s %s" (querySoFar) (condition)
-    elif (node.Left != null) then
+    elif (node.Left <> None) then
         sprintf "%s %s" (querySoFar) (string node)
         evaluateNode(node.Left, querySoFar)
     else
