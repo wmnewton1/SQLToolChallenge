@@ -86,7 +86,7 @@ let rec evaluateNode(node: Node<ClauseComponent>, querySoFar: string): string =
 let resolveWhere(rootNode: Node<ClauseComponent>): string =
     evaluateNode(rootNode, "")
 
-let generateSql(table: Queryable) (columns: Field list) (joining: JoinClause list) (whereRootNode: Node<ClauseComponent>): string =
+let generateSql(table: Queryable) (columns: Field list) (joining: JoinClause list option) (whereRootNode: Node<ClauseComponent> option): string =
     if (columns.IsEmpty) then
         failwith "At least one column must be specified."
 
@@ -99,20 +99,18 @@ let generateSql(table: Queryable) (columns: Field list) (joining: JoinClause lis
 
     let query = sprintf "SELECT %s FROM %s" (String.concat comma columnsArr) (table.Name)
 
-    if (joining == null && whereRootNode == null) then
+    match joining, whereRootNode with
+    | None, None ->
         query
-    elif (whereRootNode == null) then
-        let joins = resolveJoins(joining)
-
-        sprintf "%s %s" query joins
-    elif (joining == null) then
+    | None, Some whereRootNode ->
         let whereClause = resolveWhere(whereRootNode)
-
         sprintf "%s %s" query whereClause
-    else
+    | Some joining, None ->
+        let joins = resolveJoins(joining)
+        sprintf "%s %s" query joins
+    | Some joining, Some whereRootNode ->
         let joins = resolveJoins(joining)
         let whereClause = resolveWhere(whereRootNode)
-
         sprintf "%s %s %s" query joins whereClause
     
     ""
