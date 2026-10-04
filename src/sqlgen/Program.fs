@@ -1,4 +1,4 @@
-﻿module sqlgen
+﻿module SqlGen
 
 open TreeUtils
 
