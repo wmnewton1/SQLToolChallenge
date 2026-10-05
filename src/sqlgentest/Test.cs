@@ -1,5 +1,5 @@
 using System;
-using SqlGen.Interfaces;
+using SqlGen.Contracts;
 using SqlGen.Core;
 
 using Microsoft.FSharp.Core;

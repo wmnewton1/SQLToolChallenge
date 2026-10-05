@@ -2,7 +2,7 @@
 
 module Core =
 
-    open SqlGen.Interfaces
+    open SqlGen.Contracts
     open SqlGen.TreeUtils
 
     // to compile, run

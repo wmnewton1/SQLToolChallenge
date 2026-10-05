@@ -1,4 +1,4 @@
-﻿namespace SqlGen.Interfaces
+﻿namespace SqlGen.Contracts
 
 type Queryable =
     abstract member Name : string
