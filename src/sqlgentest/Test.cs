@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using SqlGen.Contracts;
 using SqlGen.Core;
 
@@ -15,10 +16,7 @@ namespace SqlGenTest
             Field date = new Field("Date", null, tbl);
             Field location = new Field("Location", null, tbl);
 
-            FSharpList<Field> fields = new FSharpList<Field>{
-                date,
-                location
-            };
+            FSharpList<Field> fields = ListModule.OfSeq(new List<Field> { date, location });
 
             Join join = Join.InnerJoin;
 
@@ -32,9 +30,7 @@ namespace SqlGenTest
                 condition
             );
 
-            FSharpList<JoinClause> joinClauses = new FSharpList<JoinClause>{
-                joinClause
-            };
+            FSharpList<JoinClause> joinClauses = ListModule.OfSeq(new List<JoinClause> { joinClause });
 
             String sql = SqlGen.generateSql(tbl, fields, joinClauses);
             Console.WriteLine(sql);
