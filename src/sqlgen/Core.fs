@@ -1,6 +1,9 @@
-﻿module SqlGen
+﻿namespace SqlGen.Core
 
-open TreeUtils
+module Core
+
+open SqlGen.Interfaces
+open SqlGen.TreeUtils
 
 // to compile, run
 // dotnet build src/sqlgen/Repositories.fsproj
@@ -25,9 +28,7 @@ let getOperator = function
     | LogicalOperator.And -> "AND"
     | LogicalOperator.Or -> "OR"
 
-type Queryable =
-    abstract member Name : string
-    abstract member Alias : string option
+
 
 // example implementation of Queryable
 // type Event() =

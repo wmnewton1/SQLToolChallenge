@@ -7,7 +7,9 @@
 
   <ItemGroup>
     <Compile Include="Tree.fs" />
-    <Compile Include="Program.fs" />
+    <Compile Include="Interfaces.fs" />
+    <Compile Include="Core.fs" />
+    <PackageReference Include="FSharp.Core" Version="10.1.401" />
   </ItemGroup>
 
 </Project>
