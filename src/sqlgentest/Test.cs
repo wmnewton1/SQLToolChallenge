@@ -10,10 +10,10 @@ namespace SqlGenTest
     {
         private static void Main()
         {
-            Table table = new Table("Event");
+            Table event = new Table("Event");
 
-            Field date = new Field("Date", null, Table);
-            Field location = new Field("Location", null, Table);
+            Field date = new Field("Date", null, event);
+            Field location = new Field("Location", null, event);
 
             FSharpList<Field> fields = new FSharpList<Field>{
                 date,
@@ -28,7 +28,7 @@ namespace SqlGenTest
 
             JoinClause joinClause = new JoinClause(
                 Join.InnerJoin,
-                table,
+                event,
                 condition
             );
 
@@ -36,7 +36,7 @@ namespace SqlGenTest
                 joinClause
             };
 
-            String sql = SqlGen.generateSql(table, fields, joinClauses);
+            String sql = SqlGen.generateSql(event, fields, joinClauses);
             Console.WriteLine(sql);
         }
     }
