@@ -2,7 +2,7 @@ using System;
 using SqlGen.Contracts;
 using SqlGen.Core;
 
-using Microsoft.FSharp.Core;
+using Microsoft.FSharp.Collections;
 
 namespace SqlGenTest
 {
