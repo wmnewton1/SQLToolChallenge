@@ -59,7 +59,7 @@ module Core =
     let resolveWhere(rootNode: Node<ClauseComponent>): string =
         evaluateNode(rootNode, "")
 
-    let generateSql(table: Queryable) (columns: Field list) (joining: JoinClause list option) (whereRootNode: Node<ClauseComponent> option): string =
+    let generateSql(table: Table) (columns: Field list) (joining: JoinClause list option) (whereRootNode: Node<ClauseComponent> option): string =
         if (columns.IsEmpty) then
             failwith "At least one column must be specified."
 

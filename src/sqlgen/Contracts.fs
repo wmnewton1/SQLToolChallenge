@@ -1,13 +1,8 @@
 ﻿namespace SqlGen.Contracts
 
-type Queryable =
-    abstract member Name : string
-    abstract member Alias : string option
-
-// example implementation of Queryable
-// type Event() =
-//     interface Queryable with
-//         member this.Name = "Event"
+type Table(name: string, alias: string) =
+    member this.Name = name
+    member this.Alias = alias
 
 type Join =
     | InnerJoin
@@ -15,7 +10,7 @@ type Join =
     | LeftJoin
     | RightJoin
 
-type Field(name: string, alias: string, table: Queryable) =
+type Field(name: string, alias: string, table: Table) =
     member this.Name = name
     member this.Alias = alias
     member this.Table = table
@@ -25,7 +20,7 @@ type Condition(field: Field, operator: string, value: obj) =
     member this.Operator = operator
     member this.Value = value
 
-type JoinClause(join: Join, table: Queryable, condition: Condition) =
+type JoinClause(join: Join, table: Table, condition: Condition) =
     member this.Join = join
     member this.Table = table
     member this.Condition = condition

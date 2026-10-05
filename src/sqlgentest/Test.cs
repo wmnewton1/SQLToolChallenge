@@ -40,19 +40,4 @@ namespace SqlGenTest
             Console.WriteLine(sql);
         }
     }
-
-    public class Table : Queryable
-    {
-        public string Name { get; set; }
-        public FSharpOption<string> Alias { get; set; }
-
-        public Table(string name) {
-            this.Name = name;
-        }
-
-        public Table(string name, FSharpOption<string> alias) {
-            this.Name = name;
-            this.Alias = alias;
-        }
-    }
 }
