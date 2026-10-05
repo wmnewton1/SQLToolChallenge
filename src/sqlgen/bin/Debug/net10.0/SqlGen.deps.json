@@ -6,12 +6,12 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v10.0": {
-      "Repositories/1.0.0": {
+      "SqlGen/1.0.0": {
         "dependencies": {
           "FSharp.Core": "10.1.401"
         },
         "runtime": {
-          "Repositories.dll": {}
+          "SqlGen.dll": {}
         }
       },
       "FSharp.Core/10.1.401": {
@@ -66,7 +66,7 @@
     }
   },
   "libraries": {
-    "Repositories/1.0.0": {
+    "SqlGen/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
