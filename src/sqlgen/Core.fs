@@ -28,13 +28,6 @@ let getOperator = function
     | LogicalOperator.And -> "AND"
     | LogicalOperator.Or -> "OR"
 
-
-
-// example implementation of Queryable
-// type Event() =
-//     interface Queryable with
-//         member this.Name = "Event"
-
 type Field(name: string, alias: string, table: Queryable) =
     member this.Name = name
     member this.Alias = alias
