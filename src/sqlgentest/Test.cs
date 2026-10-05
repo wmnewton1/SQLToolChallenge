@@ -32,7 +32,7 @@ namespace SqlGenTest
 
             FSharpList<JoinClause> joinClauses = ListModule.OfSeq(new List<JoinClause> { joinClause });
 
-            String sql = SqlGen.generateSql(tbl, fields, joinClauses);
+            String sql = Core.generateSql(tbl, fields, joinClauses);
             Console.WriteLine(sql);
         }
     }
