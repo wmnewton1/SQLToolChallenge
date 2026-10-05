@@ -10,7 +10,7 @@ namespace SqlGenTest
     {
         private static void Main()
         {
-            Table tbl = new Table("Event");
+            Table tbl = new Table("Event", "Event");
 
             Field date = new Field("Date", null, tbl);
             Field location = new Field("Location", null, tbl);
