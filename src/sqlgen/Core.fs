@@ -8,12 +8,6 @@ module Core =
     // to compile, run
     // dotnet build src/sqlgen/Repositories.fsproj
 
-    type Join =
-        | InnerJoin
-        | FullJoin
-        | LeftJoin
-        | RightJoin
-
     let getJoin = function
         | Join.InnerJoin -> "INNER JOIN"
         | Join.FullJoin -> "FULL JOIN"
@@ -27,21 +21,6 @@ module Core =
     let getOperator = function
         | LogicalOperator.And -> "AND"
         | LogicalOperator.Or -> "OR"
-
-    type Field(name: string, alias: string, table: Queryable) =
-        member this.Name = name
-        member this.Alias = alias
-        member this.Table = table
-
-    type Condition(field: Field, operator: string, value: obj) =
-        member this.Field = field
-        member this.Operator = operator
-        member this.Value = value
-
-    type JoinClause(join: Join, table: Queryable, condition: Condition) =
-        member this.Join = join
-        member this.Table = table
-        member this.Condition = condition
 
     type ClauseComponent =
         | Con of Condition
