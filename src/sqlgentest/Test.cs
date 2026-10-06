@@ -120,8 +120,8 @@ namespace SqlGenTest
         }
 
         private static Node<ClauseComponent> getComplexTree(Field date, Field location) {
-            Condition leftCondition = new Condition(date, "=", DateTime.Now);
-            Condition rightCondition = new Condition(location, "=", "RIGHT NODE");
+            Condition leftCondition = new Condition(date, "=", "TODAY");
+            Condition rightCondition = new Condition(location, "=", "N1 6NU");
 
             ClauseComponent leftConditionCmp = ClauseComponent.NewCon(leftCondition);
             ClauseComponent rightConditionCmp = ClauseComponent.NewCon(rightCondition);
