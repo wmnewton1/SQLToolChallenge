@@ -13,10 +13,10 @@ namespace SqlGenTest
     {
         private static void Main()
         {
-            Table events = new Table("event", "eventAlias");
-            Table eventAttendees = new Table("event_attendee", "event_attendee");
+            Table events = new Table("event", "Event Alias");
+            Table eventAttendees = new Table("event_attendee", null);
 
-            Field eventId = new Field("id", "idAlias", events);
+            Field eventId = new Field("id", "Id Alias", events);
             Field date = new Field("date", null, events);
             Field location = new Field("location", null, events);
 
@@ -26,13 +26,19 @@ namespace SqlGenTest
 
             Field eventAttendee = new Field("id", null, eventAttendees);
 
-            JoinClause joinClause = new JoinClause(
+            JoinClause innerJoinClause = new JoinClause(
                 Join.InnerJoin,
                 events,
                 getBasicTree(eventId)
             );
 
-            FSharpList<JoinClause> joinClauses = ListModule.OfSeq(new List<JoinClause> { joinClause });
+            JoinClause leftJoinClause = new JoinClause(
+                Join.LeftJoin,
+                events,
+                getBasicTree(date)
+            );
+
+            FSharpList<JoinClause> joinClauses = ListModule.OfSeq(new List<JoinClause> { innerJoinClause, leftJoinClause });
 
             String sql = Core.generateSql(events, fields, joinClauses, getBasicTree(location));
             Console.WriteLine(sql);
