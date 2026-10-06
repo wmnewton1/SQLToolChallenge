@@ -43,21 +43,29 @@ namespace SqlGenTest
         }
 
         private static Node<ClauseComponent> getBasicTree(Field field) {
-            Condition condition = new Condition(field, "=", "N1 6NU");
+            Condition leftCondition = new Condition(field, "=", "LEFT NODE");
+            Condition rightCondition = new Condition(field, "=", "RIGHT NODE");
 
-            ClauseComponent conditionCmp = ClauseComponent.NewCon(condition);
+            ClauseComponent leftConditionCmp = ClauseComponent.NewCon(leftCondition);
+            ClauseComponent rightConditionCmp = ClauseComponent.NewCon(rightCondition);
             ClauseComponent operatorCmp = ClauseComponent.NewLogOp(LogicalOperator.Or);
 
-            Node<ClauseComponent> conditionNode = new Node<ClauseComponent>(
-                conditionCmp,
+            Node<ClauseComponent> leftLeaf = new Node<ClauseComponent>(
+                leftConditionCmp,
+                FSharpOption<Node<ClauseComponent>>.None,
+                FSharpOption<Node<ClauseComponent>>.None
+            );
+            
+            Node<ClauseComponent> rightLeaf = new Node<ClauseComponent>(
+                rightConditionCmp,
                 FSharpOption<Node<ClauseComponent>>.None,
                 FSharpOption<Node<ClauseComponent>>.None
             );
 
             Node<ClauseComponent> rootNode = new Node<ClauseComponent>(
                 operatorCmp,
-                conditionNode,
-                conditionNode
+                leftLeaf,
+                rightLeaf
             );
 
             return rootNode;
