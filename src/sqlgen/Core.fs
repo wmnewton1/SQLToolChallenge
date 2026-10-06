@@ -29,8 +29,13 @@ module Core =
     let resolveField(field: Field) : string =
         sprintf "%s.%s" field.Table.Name field.Name
 
+    let resolveValue(value: obj) =
+        match value with
+        | :? Field as field -> sprintf "%s" (resolveField field)
+        | _ -> sprintf "%A" (value)
+
     let resolveCondition(condition: Condition) : string =
-        sprintf "%s %s %s" (resolveField condition.Field) (condition.Operator) (string condition.Value)
+        sprintf "%s %s %s" (resolveField condition.Field) (condition.Operator) (resolveValue condition.Value)
 
     let handleNodeValue (nodeValue: ClauseComponent) : string =
         match nodeValue with
