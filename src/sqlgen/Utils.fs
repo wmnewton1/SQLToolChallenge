@@ -19,6 +19,7 @@ module Utils =
     let resolveValue(value: obj) =
         match value with
         | :? Field as field -> sprintf "%s" (resolveField field false)
+        | :? string as field -> sprintf "\'%s\'" field
         | _ -> sprintf "%A" (value)
 
     let resolveCondition(condition: Condition) : string =
