@@ -1,5 +1,7 @@
 ﻿namespace SqlGen.Types
 
+open SqlGen.TreeUtils
+
 type Table(name: string, alias: string) =
     member this.Name = name
     member this.Alias = alias
@@ -20,11 +22,6 @@ type Condition(field: Field, operator: string, value: obj) =
     member this.Operator = operator
     member this.Value = value
 
-type JoinClause(join: Join, table: Table, condition: Condition) =
-    member this.Join = join
-    member this.Table = table
-    member this.Condition = condition
-
 type LogicalOperator =
     | And
     | Or
@@ -32,3 +29,8 @@ type LogicalOperator =
 type ClauseComponent =
     | Con of Condition
     | LogOp of LogicalOperator
+
+type JoinClause(join: Join, table: Table, conditions: Node<ClauseComponent>) =
+    member this.Join = join
+    member this.Table = table
+    member this.Conditions = conditions

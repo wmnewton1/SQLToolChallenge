@@ -27,6 +27,15 @@ module Core =
             query
         | _ -> evaluateChildren(rootNode)
 
+    let resolveJoins(joining: JoinClause list) =
+        let joins = ResizeArray<string>()
+
+        for join in joining do
+            let joinStr = sprintf "%s %s ON %s" (resolveJoin(join.Join)) (join.Table.Name) (resolveTree(join.Conditions))
+            joins.Add(joinStr)
+
+        String.concat " " joins
+
     let generateSql(table: Table) (columns: Field list) (joining: JoinClause list option) (whereRootNode: Node<ClauseComponent> option): string =
         if (columns.IsEmpty) then
             failwith "At least one column must be specified."

@@ -31,13 +31,3 @@ module Utils =
         | Join.FullJoin -> "FULL JOIN"
         | Join.LeftJoin -> "LEFT JOIN"
         | Join.RightJoin -> "RIGHT JOIN"
-
-    // TODO implement tree here as well, because join condition can have AND OR etc.
-    let resolveJoins(joining: JoinClause list) =
-        let joins = ResizeArray<string>()
-
-        for join in joining do
-            let joinStr = sprintf "%s %s ON %s" (resolveJoin(join.Join)) (join.Table.Name) (resolveCondition(join.Condition))
-            joins.Add(joinStr)
-
-        String.concat " " joins
