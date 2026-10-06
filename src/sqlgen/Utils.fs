@@ -32,6 +32,14 @@ module Utils =
         | Join.LeftJoin -> "LEFT JOIN"
         | Join.RightJoin -> "RIGHT JOIN"
 
+    let initQuery(table: Table) (columns: Field list): string =
+        let columnsArr = ResizeArray<string>()
+
+        for column in columns do
+            columnsArr.Add(resolveField column)
+
+        sprintf "SELECT %s FROM %s" (String.concat ", " columnsArr) (table.Name)
+
     let rec evaluateChildren(node: Node<ClauseComponent>): string =
         match node.Left, node.Right with
         | Some leftNode, Some rightNode ->
