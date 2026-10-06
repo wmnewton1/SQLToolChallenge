@@ -6,8 +6,6 @@ module Core =
     open SqlGen.Utils.Utils  
 
     let rec evaluateChildren(node: Node<ClauseComponent>): string =
-        let mutable querySoFar = query
-
         match node.Left, node.Right with
         | None, None ->
             resolveNode node
