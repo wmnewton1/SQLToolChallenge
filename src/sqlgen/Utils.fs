@@ -85,3 +85,6 @@ module Utils =
             joins.Add(joinStr)
 
         String.concat " " joins
+
+    let appendEnd(query: string) =
+        sprintf "%s%s" query ";"

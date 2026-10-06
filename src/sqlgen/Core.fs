@@ -13,14 +13,14 @@ module Core =
 
         match joining, whereRootNode with
         | None, None ->
-            query
+            appendEnd(query)
         | None, Some whereRootNode ->
             let whereClause = resolveTree(whereRootNode)
-            sprintf "%s WHERE %s" query whereClause
+            appendEnd(sprintf "%s WHERE %s" query whereClause)
         | Some joining, None ->
             let joins = resolveJoins(joining)
-            sprintf "%s %s" query joins
+            appendEnd(sprintf "%s %s" query joins)
         | Some joining, Some whereRootNode ->
             let joins = resolveJoins(joining)
             let whereClause = resolveTree(whereRootNode)
-            sprintf "%s %s WHERE %s" query joins whereClause
+            appendEnd(sprintf "%s %s WHERE %s" query joins whereClause)
