@@ -68,7 +68,7 @@ module Core =
         let columnsArr = ResizeArray<string>()
 
         for column in columns do
-            columnsArr.Add(column.Name)
+            columnsArr.Add(sprintf "%s.%s" column.Table.Name column.Name)
 
         let query = sprintf "SELECT %s FROM %s" (String.concat comma columnsArr) (table.Name)
 
@@ -84,4 +84,4 @@ module Core =
         | Some joining, Some whereRootNode ->
             let joins = resolveJoins(joining)
             let whereClause = resolveWhere(whereRootNode)
-            sprintf "%s %s %s" query joins whereClause
+            sprintf "%s %s WHERE %s" query joins whereClause
