@@ -4,22 +4,25 @@ module Utils =
     open SqlGen.TreeUtils
     open SqlGen.Types
 
-    let resolveField(field: Field) : string =
+    let resolveField(field: Field) (withAlias: bool) : string =
         let column = sprintf "%s.%s" field.Table.Name field.Name
 
-        match field.Alias with
-        | Some alias ->
-            sprintf "%s AS %s" (column) (alias)
-        | None ->
-            sprintf "%s" column
+        if withAlias = false then
+            column
+        else
+            match field.Alias with
+            | Some alias ->
+                sprintf "%s AS %s" (column) (alias)
+            | None ->
+                sprintf "%s" column
 
     let resolveValue(value: obj) =
         match value with
-        | :? Field as field -> sprintf "%s" (resolveField field)
+        | :? Field as field -> sprintf "%s" (resolveField field false)
         | _ -> sprintf "%A" (value)
 
     let resolveCondition(condition: Condition) : string =
-        sprintf "%s %s %s" (resolveField condition.Field) (condition.Operator) (resolveValue condition.Value)
+        sprintf "%s %s %s" (resolveField condition.Field false) (condition.Operator) (resolveValue condition.Value)
 
     let resolveOperator = function
         | LogicalOperator.And -> "AND"
@@ -42,7 +45,7 @@ module Utils =
         let columnsArr = ResizeArray<string>()
 
         for column in columns do
-            columnsArr.Add(resolveField column)
+            columnsArr.Add(resolveField column true)
 
         let query = sprintf "SELECT %s FROM %s" (String.concat ", " columnsArr) (table.Name)
         

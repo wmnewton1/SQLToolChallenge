@@ -26,14 +26,10 @@ namespace SqlGenTest
 
             Field eventAttendee = new Field("id", null, eventAttendees);
 
-            Condition condition = new Condition(
-                eventId, "=", eventAttendee
-            );
-
             JoinClause joinClause = new JoinClause(
                 Join.InnerJoin,
                 events,
-                getBasicTree(location)
+                getBasicTree(eventId)
             );
 
             FSharpList<JoinClause> joinClauses = ListModule.OfSeq(new List<JoinClause> { joinClause });
