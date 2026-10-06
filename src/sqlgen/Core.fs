@@ -40,7 +40,7 @@ module Core =
             query
         | None, Some whereRootNode ->
             let whereClause = resolveWhere(whereRootNode)
-            sprintf "%s %s" query whereClause
+            sprintf "%s WHERE %s" query whereClause
         | Some joining, None ->
             let joins = resolveJoins(joining)
             sprintf "%s %s" query joins
