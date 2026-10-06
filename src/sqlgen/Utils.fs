@@ -32,6 +32,7 @@ module Utils =
         | Join.LeftJoin -> "LEFT JOIN"
         | Join.RightJoin -> "RIGHT JOIN"
 
+    // TODO implement tree here as well, because join condition can have AND OR etc.
     let resolveJoins(joining: JoinClause list) =
         let joins = ResizeArray<string>()
 
