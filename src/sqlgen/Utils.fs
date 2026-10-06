@@ -14,7 +14,7 @@ module Utils =
             | Some alias ->
                 sprintf "%s AS %s" (column) (alias)
             | None ->
-                sprintf "%s" column
+                column
 
     let resolveValue(value: obj) =
         match value with
@@ -53,7 +53,7 @@ module Utils =
         | Some alias ->
             sprintf "%s AS %s" (query) (alias)
         | None ->
-            sprintf "%s" query
+            query
 
     let rec evaluateChildren(node: Node<ClauseComponent>): string =
         match node.Left, node.Right with
