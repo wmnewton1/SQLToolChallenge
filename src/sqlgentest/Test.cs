@@ -33,7 +33,7 @@ namespace SqlGenTest
             JoinClause joinClause = new JoinClause(
                 Join.InnerJoin,
                 events,
-                condition
+                getBasicTree(location)
             );
 
             FSharpList<JoinClause> joinClauses = ListModule.OfSeq(new List<JoinClause> { joinClause });
