@@ -9,14 +9,12 @@ module Core =
         if (columns.IsEmpty) then
             failwith "At least one column must be specified."
 
-        let comma = ", "
-
         let columnsArr = ResizeArray<string>()
 
         for column in columns do
             columnsArr.Add(resolveField column)
 
-        let query = sprintf "SELECT %s FROM %s" (String.concat comma columnsArr) (table.Name)
+        let query = sprintf "SELECT %s FROM %s" (String.concat ", " columnsArr) (table.Name)
 
         match joining, whereRootNode with
         | None, None ->
