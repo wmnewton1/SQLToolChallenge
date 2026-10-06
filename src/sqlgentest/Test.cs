@@ -34,18 +34,18 @@ namespace SqlGenTest
             JoinClause innerJoinClause = new JoinClause(
                 Join.InnerJoin,
                 events,
-                getComplexTree(eventId)
+                getComplexTree(date, location)
             );
 
             JoinClause leftJoinClause = new JoinClause(
                 Join.LeftJoin,
                 events,
-                getComplexTree(date)
+                getComplexTree(date, location)
             );
 
             FSharpList<JoinClause> joinClauses = ListModule.OfSeq(new List<JoinClause> { innerJoinClause, leftJoinClause });
 
-            return Core.generateSql(events, fields, joinClauses, getComplexTree(location));
+            return Core.generateSql(events, fields, joinClauses, getComplexTree(date, location));
         }
 
         private static string generateExampleSql2() {
@@ -119,9 +119,9 @@ namespace SqlGenTest
             return rootNode;
         }
 
-        private static Node<ClauseComponent> getComplexTree(Field field) {
-            Condition leftCondition = new Condition(field, "=", "LEFT NODE");
-            Condition rightCondition = new Condition(field, "=", "RIGHT NODE");
+        private static Node<ClauseComponent> getComplexTree(Field date, Field location) {
+            Condition leftCondition = new Condition(date, "=", DateTime.Now);
+            Condition rightCondition = new Condition(location, "=", "RIGHT NODE");
 
             ClauseComponent leftConditionCmp = ClauseComponent.NewCon(leftCondition);
             ClauseComponent rightConditionCmp = ClauseComponent.NewCon(rightCondition);
