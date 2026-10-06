@@ -5,19 +5,23 @@ module Core =
     open SqlGen.TreeUtils
     open SqlGen.Utils.Utils  
 
-    let rec evaluateChildren(node: Node<ClauseComponent>, query: string): string =
+    let rec evaluateChildren(node: Node<ClauseComponent>): string =
         let mutable querySoFar = query
 
         match node.Left, node.Right with
         | None, None ->
-            sprintf "%s %s" (querySoFar) (resolveNode node)
+            resolveNode node
         | Some leftNode, None ->
-            evaluateChildren(leftNode, sprintf "%s %s" (resolveNode leftNode) (querySoFar))
+            let leftQuery = evaluateChildren(leftNode)
+            sprintf "%s %s" (leftQuery) (resolveNode node)
         | None, Some rightNode ->
-            evaluateChildren(rightNode, sprintf "%s %s" (querySoFar) (resolveNode rightNode))
+            let rightQuery = evaluateChildren(rightNode)
+            sprintf "%s %s" (resolveNode node) (rightQuery)
         | Some leftNode, Some rightNode ->
-            querySoFar <- evaluateChildren(leftNode, sprintf "%s %s" (resolveNode leftNode) (querySoFar))
-            evaluateChildren(rightNode, sprintf "%s %s" (querySoFar) (resolveNode rightNode))
+            let leftQuery = evaluateChildren(leftNode)
+            let rightQuery = evaluateChildren(rightNode)
+
+            sprintf "%s %s %s" (leftQuery) (resolveNode node) (rightQuery)
 
     let resolveTree(rootNode: Node<ClauseComponent>): string =
         let query = resolveNode rootNode
@@ -25,7 +29,7 @@ module Core =
         match rootNode.Left, rootNode.Right with
         | None, None ->
             query
-        | _ -> evaluateChildren(rootNode, query)
+        | _ -> evaluateChildren(rootNode)
 
     let generateSql(table: Table) (columns: Field list) (joining: JoinClause list option) (whereRootNode: Node<ClauseComponent> option): string =
         if (columns.IsEmpty) then
