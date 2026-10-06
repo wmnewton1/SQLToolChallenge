@@ -11,8 +11,8 @@ namespace SqlGenTest
 {
     internal static class Program
     {
-        private static final ClauseComponent OR_OPERATOR = ClauseComponent.NewLogOp(LogicalOperator.Or);
-        private static final ClauseComponent AND_OPERATOR = ClauseComponent.NewLogOp(LogicalOperator.And);
+        private static ClauseComponent OR_OPERATOR = ClauseComponent.NewLogOp(LogicalOperator.Or);
+        private static ClauseComponent AND_OPERATOR = ClauseComponent.NewLogOp(LogicalOperator.And);
 
         private static void Main()
         {
@@ -47,7 +47,7 @@ namespace SqlGenTest
         }
 
         private static string generateExampleSql2() {
-            Table events = new Table("Events", "Event Alias");
+            Table events = new Table("Events", null);
             Table eventAttendee = new Table("EventAttendees", null);
             Table attendee = new Table("Attendee", null);
 
@@ -57,8 +57,8 @@ namespace SqlGenTest
 
             FSharpList<Field> fields = ListModule.OfSeq(new List<Field> { eventId });
 
-            ClauseComponent eventsToEventAttendee = ClauseComponent.NewCon(new Condition(eventId, "=", eventAttendeeId););
-            ClauseComponent eventAttendeeToAttendee = ClauseComponent.NewCon(new Condition(eventAttendeeId, "=", attendeeId););
+            ClauseComponent eventsToEventAttendee = ClauseComponent.NewCon(new Condition(eventId, "=", eventAttendeeId));
+            ClauseComponent eventAttendeeToAttendee = ClauseComponent.NewCon(new Condition(eventAttendeeId, "=", attendeeId));
 
             JoinClause innerJoin1 = new JoinClause(
                 Join.InnerJoin,
@@ -83,9 +83,37 @@ namespace SqlGenTest
             FSharpList<JoinClause> joinClauses = ListModule.OfSeq(new List<JoinClause> { innerJoin1, innerJoin2 });
             
             Field important = new Field("Important", null, events);
-            Field attendeeName = new Field("Name", null, eventAttendee);
+            Field attendeeName = new Field("Name", null, attendee);
 
             return Core.generateSql(events, fields, joinClauses, getBasicTree(important, attendeeName));
+        }
+
+        private static Node<ClauseComponent> getBasicTree(Field important, Field attendeeName) {
+            Condition leftCondition = new Condition(attendeeName, "=", "bob");
+            Condition rightCondition = new Condition(important, "=", 1);
+
+            ClauseComponent leftConditionCmp = ClauseComponent.NewCon(leftCondition);
+            ClauseComponent rightConditionCmp = ClauseComponent.NewCon(rightCondition);
+            
+            Node<ClauseComponent> leftLeaf = new Node<ClauseComponent>(
+                leftConditionCmp,
+                FSharpOption<Node<ClauseComponent>>.None,
+                FSharpOption<Node<ClauseComponent>>.None
+            );
+
+            Node<ClauseComponent> rightLeaf = new Node<ClauseComponent>(
+                rightConditionCmp,
+                FSharpOption<Node<ClauseComponent>>.None,
+                FSharpOption<Node<ClauseComponent>>.None
+            );
+
+            Node<ClauseComponent> rootNode = new Node<ClauseComponent>(
+                OR_OPERATOR,
+                leftLeaf,
+                rightLeaf
+            );
+
+            return rootNode;
         }
 
         private static Node<ClauseComponent> getComplexTree(Field field) {
