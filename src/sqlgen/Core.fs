@@ -10,15 +10,15 @@ module Core =
         match node.Left, node.Right with
         | None, None ->
             // node is a leaf, therefore a condition
-            let condition = handleNodeValue node.Value
+            let condition = resolveNode node
             sprintf "%s %s" querySoFar condition
         | Some leftNode, None ->
-            evaluateNode(leftNode, sprintf "%s %s" (querySoFar) (handleNodeValue leftNode.Value))
+            evaluateNode(leftNode, sprintf "%s %s" (querySoFar) (resolveNode leftNode))
         | None, Some rightNode ->
-            evaluateNode(rightNode, sprintf "%s %s" (querySoFar) (handleNodeValue rightNode.Value))
+            evaluateNode(rightNode, sprintf "%s %s" (querySoFar) (resolveNode rightNode))
         | Some leftNode, Some rightNode ->
-            evaluateNode(leftNode, sprintf "%s %s" (querySoFar) (handleNodeValue leftNode.Value))
-            evaluateNode(rightNode, sprintf "%s %s" (querySoFar) (handleNodeValue rightNode.Value))
+            evaluateNode(leftNode, sprintf "%s %s" (querySoFar) (resolveNode leftNode))
+            evaluateNode(rightNode, sprintf "%s %s" (querySoFar) (resolveNode rightNode))
 
     let resolveWhere(rootNode: Node<ClauseComponent>): string =
         let mutable query = ""

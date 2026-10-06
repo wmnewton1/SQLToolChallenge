@@ -4,13 +4,13 @@ module Utils =
     open SqlGen.Types
     open SqlGen.TreeUtils
 
-    let getJoin = function
+    let resolveJoin = function
         | Join.InnerJoin -> "INNER JOIN"
         | Join.FullJoin -> "FULL JOIN"
         | Join.LeftJoin -> "LEFT JOIN"
         | Join.RightJoin -> "RIGHT JOIN"
 
-    let getOperator = function
+    let resolveOperator = function
         | LogicalOperator.And -> "AND"
         | LogicalOperator.Or -> "OR"
 
@@ -25,16 +25,18 @@ module Utils =
     let resolveCondition(condition: Condition) : string =
         sprintf "%s %s %s" (resolveField condition.Field) (condition.Operator) (resolveValue condition.Value)
 
-    let handleNodeValue (nodeValue: ClauseComponent) : string =
+    let resolveNode (node: Node<ClauseComponent>) : string =
+        let nodeValue = node.Value;
+
         match nodeValue with
         | Con condition -> resolveCondition condition
-        | LogOp operator -> getOperator operator
+        | LogOp operator -> resolveOperator operator
 
     let resolveJoins(joining: JoinClause list) =
         let joins = ResizeArray<string>()
 
         for join in joining do
-            let joinStr = sprintf "%s %s ON %s" (getJoin(join.Join)) (join.Table.Name) (resolveCondition(join.Condition))
+            let joinStr = sprintf "%s %s ON %s" (resolveJoin(join.Join)) (join.Table.Name) (resolveCondition(join.Condition))
             joins.Add(joinStr)
 
         String.concat " " joins
