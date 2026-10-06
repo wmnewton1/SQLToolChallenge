@@ -12,7 +12,7 @@ module Utils =
         else
             match field.Alias with
             | Some alias ->
-                sprintf "%s AS %s" (column) (alias)
+                sprintf "%s AS \"%s\"" (column) (alias)
             | None ->
                 column
 
@@ -51,7 +51,7 @@ module Utils =
         
         match table.Alias with
         | Some alias ->
-            sprintf "%s AS %s" (query) (alias)
+            sprintf "%s AS \"%s\"" (query) (alias)
         | None ->
             query
 
