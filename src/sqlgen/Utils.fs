@@ -19,7 +19,7 @@ module Utils =
     let resolveValue(value: obj) =
         match value with
         | :? Field as field -> sprintf "%s" (resolveField field false)
-        | :? string as field -> sprintf "\'%s\'" field
+        | :? string as field -> sprintf "\'%s\'" field // don't want double quotes here
         | _ -> sprintf "%A" (value)
 
     let resolveCondition(condition: Condition) : string =
