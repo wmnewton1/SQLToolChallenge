@@ -13,10 +13,11 @@ namespace SqlGenTest
     {
         private static void Main()
         {
-            Table tbl = new Table("Event", "Event");
+            Table events = new Table("event", "event");
+            Table eventAttendees = new Table("event_attendee", "event_attendee");
 
-            Field date = new Field("Date", null, tbl);
-            Field location = new Field("Location", null, tbl);
+            Field date = new Field("date", null, events);
+            Field location = new Field("location", null, events);
 
             FSharpList<Field> fields = ListModule.OfSeq(new List<Field> { date, location });
 
@@ -28,7 +29,7 @@ namespace SqlGenTest
 
             JoinClause joinClause = new JoinClause(
                 Join.InnerJoin,
-                tbl,
+                events,
                 condition
             );
 
@@ -42,7 +43,7 @@ namespace SqlGenTest
                 FSharpOption<Node<Core.ClauseComponent>>.None
             );
 
-            String sql = Core.generateSql(tbl, fields, joinClauses, rootNode);
+            String sql = Core.generateSql(events, fields, joinClauses, rootNode);
             Console.WriteLine(sql);
         }
     }
