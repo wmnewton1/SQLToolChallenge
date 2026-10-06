@@ -38,16 +38,29 @@ namespace SqlGenTest
 
             FSharpList<JoinClause> joinClauses = ListModule.OfSeq(new List<JoinClause> { joinClause });
 
-            condition = new Condition(location, "=", "N1 6NU");
-            ClauseComponent component = ClauseComponent.NewCon(condition);
-            Node<ClauseComponent> rootNode = new Node<ClauseComponent>(
-                component,
+            String sql = Core.generateSql(events, fields, joinClauses, getBasicTree(location));
+            Console.WriteLine(sql);
+        }
+
+        private static Node<ClauseComponent> getBasicTree(Field field) {
+            Condition condition = new Condition(field, "=", "N1 6NU");
+
+            ClauseComponent conditionCmp = ClauseComponent.NewCon(condition);
+            ClauseComponent operatorCmp = ClauseComponent.NewLogOp(LogicalOperator.Or);
+
+            Node<ClauseComponent> conditionNode = new Node<ClauseComponent>(
+                conditionCmp,
                 FSharpOption<Node<ClauseComponent>>.None,
                 FSharpOption<Node<ClauseComponent>>.None
             );
 
-            String sql = Core.generateSql(events, fields, joinClauses, rootNode);
-            Console.WriteLine(sql);
+            Node<ClauseComponent> rootNode = new Node<ClauseComponent>(
+                operatorCmp,
+                conditionNode,
+                conditionNode
+            );
+
+            return rootNode;
         }
     }
 }
