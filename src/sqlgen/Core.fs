@@ -1,29 +1,28 @@
 ﻿namespace SqlGen.Core
 
 module Core =
-
     open SqlGen.Types
     open SqlGen.TreeUtils
     open SqlGen.Utils.Utils  
 
-    let rec evaluateNode(node: Node<ClauseComponent>, querySoFar: string): string =
+    let rec evaluateChildren(node: Node<ClauseComponent>, querySoFar: string): string =
         match node.Left, node.Right with
         | None, None ->
             // node is a leaf, therefore a condition
             let condition = resolveNode node
             sprintf "%s %s" querySoFar condition
         | Some leftNode, None ->
-            evaluateNode(leftNode, sprintf "%s %s" (querySoFar) (resolveNode leftNode))
+            evaluateChildren(leftNode, sprintf "%s %s" (resolveNode leftNode) (querySoFar))
         | None, Some rightNode ->
-            evaluateNode(rightNode, sprintf "%s %s" (querySoFar) (resolveNode rightNode))
+            evaluateChildren(rightNode, sprintf "%s %s" (querySoFar) (resolveNode rightNode))
         | Some leftNode, Some rightNode ->
-            evaluateNode(leftNode, sprintf "%s %s" (querySoFar) (resolveNode leftNode))
-            evaluateNode(rightNode, sprintf "%s %s" (querySoFar) (resolveNode rightNode))
+            evaluateChildren(leftNode, sprintf "%s %s" (resolveNode leftNode) (querySoFar))
+            evaluateChildren(rightNode, sprintf "%s %s" (querySoFar) (resolveNode rightNode))
 
     let resolveWhere(rootNode: Node<ClauseComponent>): string =
-        let mutable query = ""
+        let mutable query = resolveNode rootNode
 
-        evaluateNode(rootNode, query)
+        evaluateChildren(rootNode, query)
 
     let generateSql(table: Table) (columns: Field list) (joining: JoinClause list option) (whereRootNode: Node<ClauseComponent> option): string =
         if (columns.IsEmpty) then
