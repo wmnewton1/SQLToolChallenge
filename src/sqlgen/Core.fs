@@ -13,14 +13,17 @@ module Core =
             let condition = handleNodeValue node.Value
             sprintf "%s %s" querySoFar condition
         | Some leftNode, None ->
-            sprintf "%s %s" (querySoFar) (string leftNode.Value)
-            evaluateNode(leftNode, querySoFar)
+            evaluateNode(leftNode, sprintf "%s %s" (querySoFar) (handleNodeValue leftNode.Value))
         | None, Some rightNode ->
-            sprintf "%s %s" (querySoFar) (string rightNode.Value)
-            evaluateNode(rightNode, querySoFar)
+            evaluateNode(rightNode, sprintf "%s %s" (querySoFar) (handleNodeValue rightNode.Value))
+        | Some leftNode, Some rightNode ->
+            evaluateNode(leftNode, sprintf "%s %s" (querySoFar) (handleNodeValue leftNode.Value))
+            evaluateNode(rightNode, sprintf "%s %s" (querySoFar) (handleNodeValue rightNode.Value))
 
     let resolveWhere(rootNode: Node<ClauseComponent>): string =
-        evaluateNode(rootNode, "")
+        let mutable query = ""
+
+        evaluateNode(rootNode, query)
 
     let generateSql(table: Table) (columns: Field list) (joining: JoinClause list option) (whereRootNode: Node<ClauseComponent> option): string =
         if (columns.IsEmpty) then
