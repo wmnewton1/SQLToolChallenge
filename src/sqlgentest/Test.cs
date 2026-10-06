@@ -17,7 +17,7 @@ namespace SqlGenTest
         private static void Main()
         {
             Console.WriteLine(generateExampleSql1());
-            
+
             // this is as specified by the technical challenge doc
             Console.WriteLine(generateExampleSql2());
         }
@@ -54,13 +54,14 @@ namespace SqlGenTest
             Table attendee = new Table("Attendee", null);
 
             Field eventId = new Field("id", null, events);
-            Field eventAttendeeId = new Field("id", null, eventAttendee);
+            Field eventAttendeeEventId = new Field("EventId", null, eventAttendee);
+            Field eventAttendeeAttendeeId = new Field("AttendeeId", null, eventAttendee);
             Field attendeeId = new Field("id", null, attendee);
 
             FSharpList<Field> fields = ListModule.OfSeq(new List<Field> { eventId });
 
-            ClauseComponent eventsToEventAttendee = ClauseComponent.NewCon(new Condition(eventId, "=", eventAttendeeId));
-            ClauseComponent eventAttendeeToAttendee = ClauseComponent.NewCon(new Condition(eventAttendeeId, "=", attendeeId));
+            ClauseComponent eventsToEventAttendee = ClauseComponent.NewCon(new Condition(eventId, "=", eventAttendeeEventId));
+            ClauseComponent eventAttendeeToAttendee = ClauseComponent.NewCon(new Condition(eventAttendeeAttendeeId, "=", attendeeId));
 
             JoinClause innerJoin1 = new JoinClause(
                 Join.InnerJoin,
@@ -74,7 +75,7 @@ namespace SqlGenTest
             
             JoinClause innerJoin2 = new JoinClause(
                 Join.InnerJoin,
-                eventAttendee,
+                attendee,
                 new Node<ClauseComponent>(
                     eventAttendeeToAttendee,
                     FSharpOption<Node<ClauseComponent>>.None,
