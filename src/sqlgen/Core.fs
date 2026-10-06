@@ -22,7 +22,10 @@ module Core =
     let resolveWhere(rootNode: Node<ClauseComponent>): string =
         let mutable query = resolveNode rootNode
 
-        evaluateChildren(rootNode, query)
+        match rootNode.Left, rootNode.Right with
+        | None, None ->
+            query
+        | _ -> evaluateChildren(rootNode, query)
 
     let generateSql(table: Table) (columns: Field list) (joining: JoinClause list option) (whereRootNode: Node<ClauseComponent> option): string =
         if (columns.IsEmpty) then
