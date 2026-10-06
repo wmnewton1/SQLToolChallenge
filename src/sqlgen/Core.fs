@@ -5,7 +5,9 @@ module Core =
     open SqlGen.TreeUtils
     open SqlGen.Utils.Utils  
 
-    let rec evaluateChildren(node: Node<ClauseComponent>, querySoFar: string): string =
+    let rec evaluateChildren(node: Node<ClauseComponent>, query: string): string =
+        let mutable querySoFar = query
+
         match node.Left, node.Right with
         | None, None ->
             // node is a leaf, therefore a condition
@@ -15,7 +17,7 @@ module Core =
         | None, Some rightNode ->
             evaluateChildren(rightNode, sprintf "%s %s" (querySoFar) (resolveNode rightNode))
         | Some leftNode, Some rightNode ->
-            evaluateChildren(leftNode, sprintf "%s %s" (resolveNode leftNode) (querySoFar))
+            querySoFar <- evaluateChildren(leftNode, sprintf "%s %s" (resolveNode leftNode) (querySoFar))
             evaluateChildren(rightNode, sprintf "%s %s" (querySoFar) (resolveNode rightNode))
 
     let resolveTree(rootNode: Node<ClauseComponent>): string =
