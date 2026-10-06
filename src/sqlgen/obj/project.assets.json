@@ -108,19 +108,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\willi\\.nuget\\packages\\": {}
+    "C:\\Users\\Guest 1\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\willi\\Repositories\\src\\sqlgen\\Repositories.fsproj",
-      "projectName": "Repositories",
-      "projectPath": "C:\\Users\\willi\\Repositories\\src\\sqlgen\\Repositories.fsproj",
-      "packagesPath": "C:\\Users\\willi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\willi\\Repositories\\src\\sqlgen\\obj\\",
+      "projectUniqueName": "C:\\Users\\Guest 1\\Repositories\\SQLToolChallenge\\src\\sqlgen\\SqlGen.fsproj",
+      "projectName": "SqlGen",
+      "projectPath": "C:\\Users\\Guest 1\\Repositories\\SQLToolChallenge\\src\\sqlgen\\SqlGen.fsproj",
+      "packagesPath": "C:\\Users\\Guest 1\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Guest 1\\Repositories\\SQLToolChallenge\\src\\sqlgen\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\willi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Guest 1\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
