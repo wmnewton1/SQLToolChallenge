@@ -9,8 +9,7 @@ module Core =
         match node.Left, node.Right with
         | None, None ->
             // node is a leaf, therefore a condition
-            let condition = resolveNode node
-            sprintf "%s %s" querySoFar condition
+            sprintf "%s %s" (querySoFar) (resolveNode node)
         | Some leftNode, None ->
             evaluateChildren(leftNode, sprintf "%s %s" (resolveNode leftNode) (querySoFar))
         | None, Some rightNode ->
@@ -19,7 +18,7 @@ module Core =
             evaluateChildren(leftNode, sprintf "%s %s" (resolveNode leftNode) (querySoFar))
             evaluateChildren(rightNode, sprintf "%s %s" (querySoFar) (resolveNode rightNode))
 
-    let resolveWhere(rootNode: Node<ClauseComponent>): string =
+    let resolveTree(rootNode: Node<ClauseComponent>): string =
         let mutable query = resolveNode rootNode
 
         match rootNode.Left, rootNode.Right with
@@ -44,12 +43,12 @@ module Core =
         | None, None ->
             query
         | None, Some whereRootNode ->
-            let whereClause = resolveWhere(whereRootNode)
+            let whereClause = resolveTree(whereRootNode)
             sprintf "%s WHERE %s" query whereClause
         | Some joining, None ->
             let joins = resolveJoins(joining)
             sprintf "%s %s" query joins
         | Some joining, Some whereRootNode ->
             let joins = resolveJoins(joining)
-            let whereClause = resolveWhere(whereRootNode)
+            let whereClause = resolveTree(whereRootNode)
             sprintf "%s %s WHERE %s" query joins whereClause
