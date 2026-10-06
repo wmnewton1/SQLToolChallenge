@@ -13,10 +13,10 @@ namespace SqlGenTest
     {
         private static void Main()
         {
-            Table events = new Table("event", "event");
+            Table events = new Table("event", "eventAlias");
             Table eventAttendees = new Table("event_attendee", "event_attendee");
 
-            Field eventId = new Field("id", null, events);
+            Field eventId = new Field("id", "idAlias", events);
             Field date = new Field("date", null, events);
             Field location = new Field("location", null, events);
 

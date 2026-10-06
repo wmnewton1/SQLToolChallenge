@@ -5,7 +5,13 @@ module Utils =
     open SqlGen.Types
 
     let resolveField(field: Field) : string =
-        sprintf "%s.%s" field.Table.Name field.Name
+        let column = sprintf "%s.%s" field.Table.Name field.Name
+
+        match field.Alias with
+        | Some alias ->
+            sprintf "%s AS %s" (column) (alias)
+        | None ->
+            sprintf "%s" column
 
     let resolveValue(value: obj) =
         match value with
@@ -38,7 +44,13 @@ module Utils =
         for column in columns do
             columnsArr.Add(resolveField column)
 
-        sprintf "SELECT %s FROM %s" (String.concat ", " columnsArr) (table.Name)
+        let query = sprintf "SELECT %s FROM %s" (String.concat ", " columnsArr) (table.Name)
+        
+        match table.Alias with
+        | Some alias ->
+            sprintf "%s AS %s" (query) (alias)
+        | None ->
+            sprintf "%s" query
 
     let rec evaluateChildren(node: Node<ClauseComponent>): string =
         match node.Left, node.Right with

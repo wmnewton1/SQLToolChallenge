@@ -2,7 +2,7 @@
 
 open SqlGen.TreeUtils
 
-type Table(name: string, alias: string) =
+type Table(name: string, alias: string option) =
     member this.Name = name
     member this.Alias = alias
 
@@ -12,7 +12,7 @@ type Join =
     | LeftJoin
     | RightJoin
 
-type Field(name: string, alias: string, table: Table) =
+type Field(name: string, alias: string option, table: Table) =
     member this.Name = name
     member this.Alias = alias
     member this.Table = table
