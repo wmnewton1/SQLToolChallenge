@@ -48,14 +48,28 @@ namespace SqlGenTest
 
             ClauseComponent leftConditionCmp = ClauseComponent.NewCon(leftCondition);
             ClauseComponent rightConditionCmp = ClauseComponent.NewCon(rightCondition);
-            ClauseComponent operatorCmp = ClauseComponent.NewLogOp(LogicalOperator.Or);
+            
+            ClauseComponent andOperatorCmp = ClauseComponent.NewLogOp(LogicalOperator.And);
+            ClauseComponent orOperatorCmp = ClauseComponent.NewLogOp(LogicalOperator.Or);
 
-            Node<ClauseComponent> leftLeaf = new Node<ClauseComponent>(
+            Node<ClauseComponent> leftLeftLeaf = new Node<ClauseComponent>(
                 leftConditionCmp,
                 FSharpOption<Node<ClauseComponent>>.None,
                 FSharpOption<Node<ClauseComponent>>.None
             );
             
+            Node<ClauseComponent> leftRightLeaf = new Node<ClauseComponent>(
+                rightConditionCmp,
+                FSharpOption<Node<ClauseComponent>>.None,
+                FSharpOption<Node<ClauseComponent>>.None
+            );
+
+            Node<ClauseComponent> leftNode = new Node<ClauseComponent>(
+                andOperatorCmp,
+                leftLeftLeaf,
+                leftRightLeaf
+            );
+
             Node<ClauseComponent> rightLeaf = new Node<ClauseComponent>(
                 rightConditionCmp,
                 FSharpOption<Node<ClauseComponent>>.None,
@@ -63,8 +77,8 @@ namespace SqlGenTest
             );
 
             Node<ClauseComponent> rootNode = new Node<ClauseComponent>(
-                operatorCmp,
-                leftLeaf,
+                orOperatorCmp,
+                leftNode,
                 rightLeaf
             );
 
