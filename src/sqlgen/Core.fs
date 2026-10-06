@@ -7,19 +7,17 @@ module Core =
 
     let rec evaluateChildren(node: Node<ClauseComponent>): string =
         match node.Left, node.Right with
-        | None, None ->
-            resolveNode node
-        | Some leftNode, None ->
-            let leftQuery = evaluateChildren(leftNode)
-            sprintf "%s %s" (leftQuery) (resolveNode node)
-        | None, Some rightNode ->
-            let rightQuery = evaluateChildren(rightNode)
-            sprintf "%s %s" (resolveNode node) (rightQuery)
         | Some leftNode, Some rightNode ->
             let leftQuery = evaluateChildren(leftNode)
             let rightQuery = evaluateChildren(rightNode)
 
             sprintf "(%s %s %s)" (leftQuery) (resolveNode node) (rightQuery)
+        | None, None ->
+            resolveNode node
+        | Some leftNode, None ->
+            failwith "Each node must have two children."
+        | None, Some rightNode ->
+            failwith "Each node must have two children."
 
     let resolveTree(rootNode: Node<ClauseComponent>): string =
         let query = resolveNode rootNode
