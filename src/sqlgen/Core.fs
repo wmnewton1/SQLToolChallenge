@@ -10,7 +10,6 @@ module Core =
 
         match node.Left, node.Right with
         | None, None ->
-            // node is a leaf, so no need to evaluate children
             sprintf "%s %s" (querySoFar) (resolveNode node)
         | Some leftNode, None ->
             evaluateChildren(leftNode, sprintf "%s %s" (resolveNode leftNode) (querySoFar))
