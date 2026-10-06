@@ -17,6 +17,8 @@ namespace SqlGenTest
         private static void Main()
         {
             Console.WriteLine(generateExampleSql1());
+            
+            // this is as specified by the technical challenge doc
             Console.WriteLine(generateExampleSql2());
         }
 
