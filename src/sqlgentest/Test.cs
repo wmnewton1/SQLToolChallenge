@@ -16,15 +16,18 @@ namespace SqlGenTest
             Table events = new Table("event", "event");
             Table eventAttendees = new Table("event_attendee", "event_attendee");
 
+            Field eventId = new Field("id", null, events);
             Field date = new Field("date", null, events);
             Field location = new Field("location", null, events);
 
-            FSharpList<Field> fields = ListModule.OfSeq(new List<Field> { date, location });
+            FSharpList<Field> fields = ListModule.OfSeq(new List<Field> { eventId, date, location });
 
             Join join = Join.InnerJoin;
 
+            Field eventAttendee = new Field("id", null, eventAttendees);
+
             Condition condition = new Condition(
-                date, "=", DateTime.Now
+                eventId, "=", eventAttendee
             );
 
             JoinClause joinClause = new JoinClause(
