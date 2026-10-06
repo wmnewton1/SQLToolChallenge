@@ -85,5 +85,3 @@ module Core =
             let joins = resolveJoins(joining)
             let whereClause = resolveWhere(whereRootNode)
             sprintf "%s %s %s" query joins whereClause
-        
-        ""
