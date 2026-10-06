@@ -26,8 +26,11 @@ module Core =
         | Con of Condition
         | LogOp of LogicalOperator
 
+    let resolveField(field: Field) : string =
+        sprintf "%s.%s" field.Table.Name field.Name
+
     let resolveCondition(condition: Condition) : string =
-        sprintf "%s %s %s" (condition.Field.Name) (condition.Operator) (string condition.Value)
+        sprintf "%s %s %s" (resolveField condition.Field) (condition.Operator) (string condition.Value)
 
     let handleNodeValue (nodeValue: ClauseComponent) : string =
         match nodeValue with
@@ -68,7 +71,7 @@ module Core =
         let columnsArr = ResizeArray<string>()
 
         for column in columns do
-            columnsArr.Add(sprintf "%s.%s" column.Table.Name column.Name)
+            columnsArr.Add(resolveField column)
 
         let query = sprintf "SELECT %s FROM %s" (String.concat comma columnsArr) (table.Name)
 
