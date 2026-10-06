@@ -11,10 +11,17 @@ namespace SqlGenTest
 {
     internal static class Program
     {
+        private static final ClauseComponent OR_OPERATOR = ClauseComponent.NewLogOp(LogicalOperator.Or);
+        private static final ClauseComponent AND_OPERATOR = ClauseComponent.NewLogOp(LogicalOperator.And);
+
         private static void Main()
         {
+            Console.WriteLine(generateExampleSql1());
+            Console.WriteLine(generateExampleSql2());
+        }
+
+        private static string generateExampleSql1() {
             Table events = new Table("event", "Event Alias");
-            Table eventAttendees = new Table("event_attendee", null);
 
             Field eventId = new Field("id", "Id Alias", events);
             Field date = new Field("date", null, events);
@@ -22,37 +29,71 @@ namespace SqlGenTest
 
             FSharpList<Field> fields = ListModule.OfSeq(new List<Field> { eventId, date, location });
 
-            Join join = Join.InnerJoin;
-
-            Field eventAttendee = new Field("id", null, eventAttendees);
-
             JoinClause innerJoinClause = new JoinClause(
                 Join.InnerJoin,
                 events,
-                getBasicTree(eventId)
+                getComplexTree(eventId)
             );
 
             JoinClause leftJoinClause = new JoinClause(
                 Join.LeftJoin,
                 events,
-                getBasicTree(date)
+                getComplexTree(date)
             );
 
             FSharpList<JoinClause> joinClauses = ListModule.OfSeq(new List<JoinClause> { innerJoinClause, leftJoinClause });
 
-            String sql = Core.generateSql(events, fields, joinClauses, getBasicTree(location));
-            Console.WriteLine(sql);
+            return Core.generateSql(events, fields, joinClauses, getComplexTree(location));
         }
 
-        private static Node<ClauseComponent> getBasicTree(Field field) {
+        private static string generateExampleSql2() {
+            Table events = new Table("Events", "Event Alias");
+            Table eventAttendee = new Table("EventAttendees", null);
+            Table attendee = new Table("Attendee", null);
+
+            Field eventId = new Field("id", null, events);
+            Field eventAttendeeId = new Field("id", null, eventAttendee);
+            Field attendeeId = new Field("id", null, attendee);
+
+            FSharpList<Field> fields = ListModule.OfSeq(new List<Field> { eventId });
+
+            ClauseComponent eventsToEventAttendee = ClauseComponent.NewCon(new Condition(eventId, "=", eventAttendeeId););
+            ClauseComponent eventAttendeeToAttendee = ClauseComponent.NewCon(new Condition(eventAttendeeId, "=", attendeeId););
+
+            JoinClause innerJoin1 = new JoinClause(
+                Join.InnerJoin,
+                eventAttendee,
+                new Node<ClauseComponent>(
+                    eventsToEventAttendee,
+                    FSharpOption<Node<ClauseComponent>>.None,
+                    FSharpOption<Node<ClauseComponent>>.None
+                )
+            );
+            
+            JoinClause innerJoin2 = new JoinClause(
+                Join.InnerJoin,
+                eventAttendee,
+                new Node<ClauseComponent>(
+                    eventAttendeeToAttendee,
+                    FSharpOption<Node<ClauseComponent>>.None,
+                    FSharpOption<Node<ClauseComponent>>.None
+                )
+            );
+
+            FSharpList<JoinClause> joinClauses = ListModule.OfSeq(new List<JoinClause> { innerJoin1, innerJoin2 });
+            
+            Field important = new Field("Important", null, events);
+            Field attendeeName = new Field("Name", null, eventAttendee);
+
+            return Core.generateSql(events, fields, joinClauses, getBasicTree(important, attendeeName));
+        }
+
+        private static Node<ClauseComponent> getComplexTree(Field field) {
             Condition leftCondition = new Condition(field, "=", "LEFT NODE");
             Condition rightCondition = new Condition(field, "=", "RIGHT NODE");
 
             ClauseComponent leftConditionCmp = ClauseComponent.NewCon(leftCondition);
             ClauseComponent rightConditionCmp = ClauseComponent.NewCon(rightCondition);
-            
-            ClauseComponent andOperatorCmp = ClauseComponent.NewLogOp(LogicalOperator.And);
-            ClauseComponent orOperatorCmp = ClauseComponent.NewLogOp(LogicalOperator.Or);
 
             Node<ClauseComponent> leftLeftLeaf = new Node<ClauseComponent>(
                 leftConditionCmp,
@@ -67,7 +108,7 @@ namespace SqlGenTest
             );
 
             Node<ClauseComponent> leftNode = new Node<ClauseComponent>(
-                andOperatorCmp,
+                AND_OPERATOR,
                 leftLeftLeaf,
                 leftRightLeaf
             );
@@ -79,7 +120,7 @@ namespace SqlGenTest
             );
 
             Node<ClauseComponent> rootNode = new Node<ClauseComponent>(
-                orOperatorCmp,
+                OR_OPERATOR,
                 leftNode,
                 rightLeaf
             );
