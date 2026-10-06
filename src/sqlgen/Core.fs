@@ -21,7 +21,7 @@ module Core =
             evaluateChildren(rightNode, sprintf "%s %s" (querySoFar) (resolveNode rightNode))
 
     let resolveTree(rootNode: Node<ClauseComponent>): string =
-        let mutable query = resolveNode rootNode
+        let query = resolveNode rootNode
 
         match rootNode.Left, rootNode.Right with
         | None, None ->
