@@ -8,10 +8,10 @@ module Core =
     let rec evaluateChildren(node: Node<ClauseComponent>): string =
         match node.Left, node.Right with
         | Some leftNode, Some rightNode ->
-            let leftQuery = evaluateChildren(leftNode)
-            let rightQuery = evaluateChildren(rightNode)
+            let leftOperand = evaluateChildren(leftNode)
+            let rightOperand = evaluateChildren(rightNode)
 
-            sprintf "(%s %s %s)" (leftQuery) (resolveNode node) (rightQuery)
+            sprintf "(%s %s %s)" (leftOperand) (resolveNode node) (rightOperand)
         | None, None ->
             resolveNode node
         | Some leftNode, None ->
