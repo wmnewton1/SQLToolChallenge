@@ -1,8 +1,8 @@
 ﻿namespace SqlGen.Core
 
 module Core =
-    open SqlGen.Types
     open SqlGen.TreeUtils
+    open SqlGen.Types
     open SqlGen.Utils.Utils  
 
     let rec evaluateChildren(node: Node<ClauseComponent>): string =

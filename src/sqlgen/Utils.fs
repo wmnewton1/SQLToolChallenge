@@ -1,8 +1,8 @@
 ﻿namespace SqlGen.Utils
 
 module Utils =
-    open SqlGen.Types
     open SqlGen.TreeUtils
+    open SqlGen.Types
 
     let resolveField(field: Field) : string =
         sprintf "%s.%s" field.Table.Name field.Name
