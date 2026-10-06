@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using SqlGen.Contracts;
+using SqlGen.Types;
 using SqlGen.Core;
 using SqlGen.TreeUtils;
 
@@ -39,11 +39,11 @@ namespace SqlGenTest
             FSharpList<JoinClause> joinClauses = ListModule.OfSeq(new List<JoinClause> { joinClause });
 
             condition = new Condition(location, "=", "N1 6NU");
-            Core.ClauseComponent component = Core.ClauseComponent.NewCon(condition);
-            Node<Core.ClauseComponent> rootNode = new Node<Core.ClauseComponent>(
+            ClauseComponent component = ClauseComponent.NewCon(condition);
+            Node<ClauseComponent> rootNode = new Node<ClauseComponent>(
                 component,
-                FSharpOption<Node<Core.ClauseComponent>>.None,
-                FSharpOption<Node<Core.ClauseComponent>>.None
+                FSharpOption<Node<ClauseComponent>>.None,
+                FSharpOption<Node<ClauseComponent>>.None
             );
 
             String sql = Core.generateSql(events, fields, joinClauses, rootNode);
