@@ -2,54 +2,9 @@
 
 module Core =
 
-    open SqlGen.Contracts
+    open SqlGen.Types
     open SqlGen.TreeUtils
-
-    // to compile, run
-    // dotnet build src/sqlgen/Repositories.fsproj
-
-    let getJoin = function
-        | Join.InnerJoin -> "INNER JOIN"
-        | Join.FullJoin -> "FULL JOIN"
-        | Join.LeftJoin -> "LEFT JOIN"
-        | Join.RightJoin -> "RIGHT JOIN"
-
-    type LogicalOperator =
-        | And
-        | Or
-
-    let getOperator = function
-        | LogicalOperator.And -> "AND"
-        | LogicalOperator.Or -> "OR"
-
-    type ClauseComponent =
-        | Con of Condition
-        | LogOp of LogicalOperator
-
-    let resolveField(field: Field) : string =
-        sprintf "%s.%s" field.Table.Name field.Name
-
-    let resolveValue(value: obj) =
-        match value with
-        | :? Field as field -> sprintf "%s" (resolveField field)
-        | _ -> sprintf "%A" (value)
-
-    let resolveCondition(condition: Condition) : string =
-        sprintf "%s %s %s" (resolveField condition.Field) (condition.Operator) (resolveValue condition.Value)
-
-    let handleNodeValue (nodeValue: ClauseComponent) : string =
-        match nodeValue with
-        | Con condition -> resolveCondition condition
-        | LogOp operator -> getOperator operator
-
-    let resolveJoins(joining: JoinClause list) =
-        let joins = ResizeArray<string>()
-
-        for join in joining do
-            let joinStr = sprintf "%s %s ON %s" (getJoin(join.Join)) (join.Table.Name) (resolveCondition(join.Condition))
-            joins.Add(joinStr)
-
-        String.concat " " joins    
+    open SqlGen.Utils.Utils  
 
     let rec evaluateNode(node: Node<ClauseComponent>, querySoFar: string): string =
         match node.Left, node.Right with

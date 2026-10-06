@@ -1,4 +1,4 @@
-﻿namespace SqlGen.Contracts
+﻿namespace SqlGen.Types
 
 type Table(name: string, alias: string) =
     member this.Name = name
@@ -24,3 +24,11 @@ type JoinClause(join: Join, table: Table, condition: Condition) =
     member this.Join = join
     member this.Table = table
     member this.Condition = condition
+
+type LogicalOperator =
+    | And
+    | Or
+
+type ClauseComponent =
+    | Con of Condition
+    | LogOp of LogicalOperator
