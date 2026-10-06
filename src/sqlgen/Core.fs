@@ -19,7 +19,7 @@ module Core =
             let leftQuery = evaluateChildren(leftNode)
             let rightQuery = evaluateChildren(rightNode)
 
-            sprintf "%s %s %s" (leftQuery) (resolveNode node) (rightQuery)
+            sprintf "(%s %s %s)" (leftQuery) (resolveNode node) (rightQuery)
 
     let resolveTree(rootNode: Node<ClauseComponent>): string =
         let query = resolveNode rootNode
